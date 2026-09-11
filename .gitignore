@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+venv/
+env/
+
+# Next.js
+frontend/.next/
+frontend/out/
+
+# Build
+frontend/build/
+dist/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data
+data/*.db
+data/*.sqlite
+*.chromadb/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Package lock (keep package-lock.json)
