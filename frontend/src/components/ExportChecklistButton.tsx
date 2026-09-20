@@ -121,7 +121,7 @@ export default function ExportChecklistButton({ results, query }: ExportChecklis
   };
 
   return (
-    <div className="flex items-center gap-2 no-print">
+    <div className="flex items-center gap-2">
       <button
         onClick={handleDownloadPdf}
         disabled={downloading}

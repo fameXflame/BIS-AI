@@ -350,12 +350,6 @@ export default function Home() {
               {/* Scrollable results */}
               <div className="flex-1 overflow-y-auto custom-scrollbar px-4 pb-8">
                 <div className="max-w-[680px] mx-auto space-y-3">
-                  {/* Official Print Header (Visible only when exporting/printing) */}
-                  <div className="hidden print:block mb-4 p-4 border-b-2 border-slate-800">
-                    <div className="text-lg font-bold text-slate-900 tracking-wide">BUREAU OF INDIAN STANDARDS (BIS) COMPLIANCE DOSSIER</div>
-                    <div className="text-xs text-slate-600 mt-1">Generated via BIS AI Search Engine • Query: <strong>{currentQuery}</strong></div>
-                  </div>
-
                   {/* AI summary & walk-along */}
                   <AIResponse
                     summary={results.summary}
