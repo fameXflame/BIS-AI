@@ -24,7 +24,7 @@ export default function Header({ onToggleSidebar, hasHistory }: HeaderProps) {
         onClick={onToggleSidebar}
         className={`
           p-2 rounded-xl glass-button
-          text-white/40 hover:text-white/80
+          text-slate-400 hover:text-slate-700
           transition-colors duration-200
           ${!hasHistory ? 'opacity-40 pointer-events-none' : ''}
         `}
@@ -35,13 +35,13 @@ export default function Header({ onToggleSidebar, hasHistory }: HeaderProps) {
 
       {/* Center: Logo */}
       <div className="flex items-center gap-2">
-        <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-cyan-500/80 to-blue-600/80 flex items-center justify-center shadow-lg shadow-cyan-500/10">
+        <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-cyan-500/80 to-blue-600/80 flex items-center justify-center shadow-lg shadow-cyan-500/20">
           <Sparkles size={14} className="text-white" />
         </div>
-        <span className="text-sm font-medium text-white/70 tracking-wide">
+        <span className="text-sm font-medium text-slate-800 tracking-wide">
           BIS AI
         </span>
-        <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-white/[0.06] border border-white/[0.08] text-white/30 font-medium">
+        <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-slate-100 border border-slate-200 text-slate-400 font-medium">
           v1.0
         </span>
       </div>

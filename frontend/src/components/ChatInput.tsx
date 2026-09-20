@@ -106,12 +106,12 @@ export default function ChatInput({
             exit={{ opacity: 0, y: -4, height: 0 }}
             className="mb-2"
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/[0.05] border border-white/[0.08] text-xs text-white/50">
-              <FileText size={13} className="text-cyan-400/60" />
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 border border-slate-200 text-xs text-slate-600">
+              <FileText size={13} className="text-cyan-500" />
               <span className="truncate max-w-[200px]">{attachedFile.name}</span>
               <button
                 onClick={() => setAttachedFile(null)}
-                className="ml-1 text-white/30 hover:text-white/70 transition-colors"
+                className="ml-1 text-slate-400 hover:text-slate-700 transition-colors"
               >
                 <X size={13} />
               </button>
@@ -134,7 +134,7 @@ export default function ChatInput({
             />
             <button
               onClick={() => fileInputRef.current?.click()}
-              className="p-1.5 rounded-lg text-white/25 hover:text-white/60 hover:bg-white/[0.05] transition-all duration-200"
+              className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-all duration-200"
               title="Attach document"
             >
               <Paperclip size={16} />
@@ -144,7 +144,7 @@ export default function ChatInput({
               className={`p-1.5 rounded-lg transition-all duration-200 ${
                 isRecording
                   ? 'text-red-400 bg-red-500/10 recording-pulse'
-                  : 'text-white/25 hover:text-white/60 hover:bg-white/[0.05]'
+                  : 'text-slate-400 hover:text-slate-600 hover:bg-slate-100'
               }`}
               title={isRecording ? 'Stop recording' : 'Voice input'}
             >
@@ -164,8 +164,8 @@ export default function ChatInput({
             disabled={isLoading}
             className="
               flex-1 bg-transparent resize-none
-              text-[13px] leading-relaxed text-white/85
-              placeholder:text-white/20
+              text-[13px] leading-relaxed text-slate-800
+              placeholder:text-slate-400
               outline-none
               min-h-[32px] py-1.5
               disabled:opacity-40
@@ -181,7 +181,7 @@ export default function ChatInput({
               transition-all duration-200
               ${canSubmit
                 ? 'bg-gradient-to-r from-cyan-500/70 to-blue-500/70 text-white shadow-lg shadow-cyan-500/15 hover:from-cyan-400/80 hover:to-blue-400/80 hover:shadow-cyan-500/25'
-                : 'bg-white/[0.04] text-white/15 cursor-not-allowed'
+                : 'bg-slate-100 text-slate-300 cursor-not-allowed'
               }
             `}
           >

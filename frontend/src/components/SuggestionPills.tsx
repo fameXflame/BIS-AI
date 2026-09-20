@@ -32,10 +32,10 @@ export default function SuggestionPills({ onSelect }: SuggestionPillsProps) {
           onClick={() => onSelect(s)}
           className="
             px-3 py-1.5 rounded-full
-            text-[11px] text-white/30
-            bg-white/[0.03] border border-white/[0.06]
-            hover:bg-white/[0.07] hover:border-white/[0.12] hover:text-white/55
-            backdrop-blur-sm
+            text-[11px] text-slate-500
+            bg-white/80 border border-slate-200/60
+            hover:bg-white hover:border-slate-300 hover:text-slate-700
+            backdrop-blur-sm shadow-sm hover:shadow-md
             transition-all duration-200
             cursor-pointer
           "

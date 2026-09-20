@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import WormholeStars from '@/components/WormholeStars';
+import ParticleBackground from '@/components/ParticleBackground';
 import Header from '@/components/Header';
 import ChatInput from '@/components/ChatInput';
 import SuggestionPills from '@/components/SuggestionPills';
@@ -74,9 +74,9 @@ export default function Home() {
   );
 
   return (
-    <main className="relative h-screen w-screen overflow-hidden bg-black">
-      {/* Wormhole starfield background */}
-      <WormholeStars />
+    <main className="relative h-screen w-screen overflow-hidden bg-white">
+      {/* Interactive particle background */}
+      <ParticleBackground />
 
       {/* App chrome */}
       <div className="relative z-10 h-full flex flex-col">
@@ -103,13 +103,13 @@ export default function Home() {
                 transition={{ delay: 0.15, duration: 0.6 }}
                 className="text-center mb-7"
               >
-                <h1 className="text-3xl md:text-[2.5rem] font-extralight text-white/90 tracking-tight leading-tight mb-2.5">
+                <h1 className="text-3xl md:text-[2.5rem] font-extralight text-slate-800 tracking-tight leading-tight mb-2.5">
                   BIS{' '}
-                  <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-400 bg-clip-text text-transparent font-normal">
+                  <span className="bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-500 bg-clip-text text-transparent font-normal">
                     AI
                   </span>
                 </h1>
-                <p className="text-[13px] text-white/25 max-w-sm mx-auto leading-relaxed">
+                <p className="text-[13px] text-slate-400 max-w-sm mx-auto leading-relaxed">
                   AI-powered search across 25,000+ Bureau of Indian Standards
                 </p>
               </motion.div>

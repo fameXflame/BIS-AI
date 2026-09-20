@@ -20,26 +20,26 @@ export default function AIResponse({ summary, magnifiedQuery }: AIResponseProps)
     >
       {/* AI avatar + label */}
       <div className="flex items-center gap-2 mb-3">
-        <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-cyan-500/60 to-indigo-500/60 flex items-center justify-center">
+        <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-cyan-500 to-indigo-500 flex items-center justify-center">
           <Bot size={13} className="text-white" />
         </div>
-        <span className="text-[11px] font-medium text-white/40 uppercase tracking-wider">AI Analysis</span>
+        <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">AI Analysis</span>
       </div>
 
       {/* Summary text */}
-      <p className="text-[13px] leading-relaxed text-white/65 mb-3">
+      <p className="text-[13px] leading-relaxed text-slate-600 mb-3">
         {summary}
       </p>
 
       {/* Magnified keywords */}
       {keywords.length > 0 && (
         <div className="flex items-start gap-2">
-          <Zap size={12} className="text-amber-400/50 mt-0.5 shrink-0" />
+          <Zap size={12} className="text-amber-500 mt-0.5 shrink-0" />
           <div className="flex flex-wrap gap-1.5">
             {keywords.map((kw) => (
               <span
                 key={kw}
-                className="px-2 py-0.5 rounded-md text-[10px] bg-white/[0.04] border border-white/[0.06] text-white/35"
+                className="px-2 py-0.5 rounded-md text-[10px] bg-slate-100 border border-slate-200 text-slate-500"
               >
                 {kw}
               </span>
