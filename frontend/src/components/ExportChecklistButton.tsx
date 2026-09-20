@@ -20,15 +20,60 @@ export default function ExportChecklistButton({ results, query }: ExportChecklis
       const blob = await exportDossierPdf(query, results);
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
+      a.style.display = 'none';
       a.href = url;
       a.download = `BIS_Compliance_Dossier_${query.slice(0, 20).replace(/[^a-zA-Z0-9]/g, '_')}.pdf`;
       document.body.appendChild(a);
       a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
+      setTimeout(() => {
+        if (document.body.contains(a)) {
+          document.body.removeChild(a);
+        }
+        window.URL.revokeObjectURL(url);
+      }, 1000);
     } catch (err) {
-      console.warn('Server PDF generation failed, falling back to window.print():', err);
-      window.print();
+      console.error('Server PDF generation failed, attempting client-side fallback:', err);
+      try {
+        const { jsPDF } = await import('jspdf');
+        const doc = new jsPDF();
+        doc.setFontSize(16);
+        doc.text('BIS AI Compliance Dossier', 14, 20);
+        doc.setFontSize(10);
+        doc.text(`Query: ${query}`, 14, 28);
+        doc.text(`Generated: ${new Date().toLocaleDateString('en-IN')}`, 14, 34);
+
+        let y = 44;
+        if (results.summary) {
+          doc.setFontSize(12);
+          doc.text('Summary Advisory:', 14, y);
+          y += 6;
+          doc.setFontSize(9);
+          const splitSummary = doc.splitTextToSize(results.summary, 180);
+          doc.text(splitSummary, 14, y);
+          y += splitSummary.length * 5 + 6;
+        }
+
+        if (results.standards && results.standards.length > 0) {
+          doc.setFontSize(12);
+          doc.text('Applicable Standards:', 14, y);
+          y += 6;
+          results.standards.slice(0, 5).forEach((std) => {
+            if (y > 270) {
+              doc.addPage();
+              y = 20;
+            }
+            doc.setFontSize(10);
+            doc.text(`${std.is_code} - ${std.title.slice(0, 70)}`, 14, y);
+            y += 5;
+            doc.setFontSize(8);
+            doc.text(`Status: ${std.mandatory ? 'Mandatory QCO' : 'Voluntary'} | Confidence: ${std.confidence}%`, 14, y);
+            y += 7;
+          });
+        }
+        doc.save(`BIS_Compliance_Dossier_${query.slice(0, 20).replace(/[^a-zA-Z0-9]/g, '_')}.pdf`);
+      } catch (fallbackErr) {
+        console.error('Client-side fallback PDF failed:', fallbackErr);
+      }
     } finally {
       setDownloading(false);
     }
