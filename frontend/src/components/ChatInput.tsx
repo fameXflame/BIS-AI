@@ -96,7 +96,7 @@ export default function ChatInput({
   const canSubmit = (query.trim().length > 0 || attachedFile !== null) && !isLoading;
 
   return (
-    <motion.div layout className="w-full max-w-[680px] mx-auto">
+    <motion.div layout className="w-full max-w-[740px] mx-auto">
       {/* Attached file chip */}
       <AnimatePresence>
         {attachedFile && (
@@ -106,12 +106,12 @@ export default function ChatInput({
             exit={{ opacity: 0, y: -4, height: 0 }}
             className="mb-2"
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 border border-slate-200 text-xs text-slate-600">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-black border border-slate-200 dark:border-neutral-800 text-xs text-slate-600 dark:text-neutral-300">
               <FileText size={13} className="text-cyan-500" />
               <span className="truncate max-w-[200px]">{attachedFile.name}</span>
               <button
                 onClick={() => setAttachedFile(null)}
-                className="ml-1 text-slate-400 hover:text-slate-700 transition-colors"
+                className="ml-1 text-slate-400 dark:text-neutral-400 hover:text-slate-700 dark:hover:text-white transition-colors"
               >
                 <X size={13} />
               </button>
@@ -120,11 +120,22 @@ export default function ChatInput({
         )}
       </AnimatePresence>
 
-      {/* Main input container */}
-      <div className="glass-input rounded-2xl">
-        <div className="flex items-end gap-1 p-2.5">
+      {/* Main pill input container highlighted with distinct border & subtle glow */}
+      <div className="
+        bg-white dark:bg-black rounded-full 
+        border border-slate-300/90 dark:border-neutral-800 hover:border-blue-500/70 dark:hover:border-blue-500/80 focus-within:border-blue-600 dark:focus-within:border-blue-500
+        ring-1 ring-slate-900/5 dark:ring-neutral-800 hover:ring-2 hover:ring-blue-500/10 focus-within:ring-3 focus-within:ring-blue-500/20
+        shadow-[0_8px_30px_rgba(15,23,42,0.07),0_2px_6px_rgba(15,23,42,0.04)]
+        dark:shadow-[0_0_16px_rgba(59,130,246,0.18)]
+        hover:shadow-[0_12px_36px_rgba(37,99,235,0.12),0_4px_12px_rgba(15,23,42,0.05)]
+        dark:hover:shadow-[0_0_22px_rgba(59,130,246,0.28)]
+        focus-within:shadow-[0_14px_44px_rgba(37,99,235,0.22),0_4px_12px_rgba(15,23,42,0.06)]
+        dark:focus-within:shadow-[0_0_28px_rgba(59,130,246,0.35)]
+        transition-all duration-300
+      ">
+        <div className="flex items-center gap-2 px-4 py-2.5">
           {/* Left action buttons */}
-          <div className="flex items-center gap-0.5 pb-[3px]">
+          <div className="flex items-center gap-1">
             <input
               type="file"
               ref={fileInputRef}
@@ -134,25 +145,25 @@ export default function ChatInput({
             />
             <button
               onClick={() => fileInputRef.current?.click()}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-all duration-200"
-              title="Attach document"
+              className="p-2 rounded-full text-slate-400 dark:text-neutral-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-neutral-900 transition-all duration-200 cursor-pointer"
+              title="Attach document / specification sheet"
             >
-              <Paperclip size={16} />
+              <Paperclip size={17} />
             </button>
             <button
               onClick={toggleRecording}
-              className={`p-1.5 rounded-lg transition-all duration-200 ${
+              className={`p-2 rounded-full transition-all duration-200 cursor-pointer ${
                 isRecording
-                  ? 'text-red-400 bg-red-500/10 recording-pulse'
-                  : 'text-slate-400 hover:text-slate-600 hover:bg-slate-100'
+                  ? 'text-red-500 bg-red-50 dark:bg-red-950/40 recording-pulse'
+                  : 'text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:bg-blue-50/60 dark:hover:bg-neutral-900'
               }`}
-              title={isRecording ? 'Stop recording' : 'Voice input'}
+              title={isRecording ? 'Stop recording' : 'Voice search'}
             >
-              {isRecording ? <MicOff size={16} /> : <Mic size={16} />}
+              {isRecording ? <MicOff size={17} /> : <Mic size={17} />}
             </button>
           </div>
 
-          {/* Textarea */}
+          {/* Textarea without square focus outline */}
           <textarea
             ref={textareaRef}
             value={query}
@@ -162,30 +173,33 @@ export default function ChatInput({
             placeholder="Ask about BIS standards — try 'electric kettle manufacturing requirements'..."
             rows={1}
             disabled={isLoading}
+            style={{ outline: 'none', boxShadow: 'none', border: 'none' }}
             className="
               flex-1 bg-transparent resize-none
-              text-[13px] leading-relaxed text-slate-800
-              placeholder:text-slate-400
-              outline-none
-              min-h-[32px] py-1.5
+              text-[13.5px] leading-normal text-slate-800 dark:text-neutral-100
+              placeholder:text-slate-400 dark:placeholder:text-neutral-500 font-normal
+              border-0 outline-none ring-0
+              focus:outline-none focus:ring-0 focus:border-0
+              py-1
               disabled:opacity-40
             "
           />
 
-          {/* Send button */}
+          {/* Vibrant Blue Send Button */}
           <button
             onClick={handleSubmit}
             disabled={!canSubmit}
             className={`
-              p-2 rounded-xl mb-[1px]
-              transition-all duration-200
+              w-10 h-10 rounded-full flex items-center justify-center shrink-0
+              transition-all duration-200 shadow-md
               ${canSubmit
-                ? 'bg-gradient-to-r from-cyan-500/70 to-blue-500/70 text-white shadow-lg shadow-cyan-500/15 hover:from-cyan-400/80 hover:to-blue-400/80 hover:shadow-cyan-500/25'
-                : 'bg-slate-100 text-slate-300 cursor-not-allowed'
+                ? 'bg-[#2563eb] hover:bg-[#1d4ed8] text-white shadow-blue-500/25 hover:scale-105 active:scale-95 cursor-pointer'
+                : 'bg-slate-100 dark:bg-neutral-900 text-slate-300 dark:text-neutral-600 cursor-not-allowed'
               }
             `}
+            title="Search Standards"
           >
-            <Send size={14} />
+            <Send size={15} className={canSubmit ? 'translate-x-[1px]' : ''} />
           </button>
         </div>
       </div>

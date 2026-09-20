@@ -34,6 +34,9 @@ data/*.db
 data/*.sqlite
 *.chromadb/
 
+# Build artifacts
+*.tsbuildinfo
+
 # Logs
 *.log
 npm-debug.log*

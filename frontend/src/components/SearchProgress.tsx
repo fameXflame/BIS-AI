@@ -23,8 +23,8 @@ export default function SearchProgress({ step, query }: SearchProgressProps) {
         animate={{ opacity: 1, y: 0 }}
         className="text-center mb-8"
       >
-        <p className="text-[11px] text-slate-400 mb-1">Searching for</p>
-        <p className="text-sm text-slate-700 font-medium">&ldquo;{query}&rdquo;</p>
+        <p className="text-[11px] text-slate-500 dark:text-slate-400 mb-1">Searching for</p>
+        <p className="text-sm text-slate-800 dark:text-slate-100 font-medium">&ldquo;{query}&rdquo;</p>
       </motion.div>
 
       {/* Progress steps */}
@@ -50,19 +50,19 @@ export default function SearchProgress({ step, query }: SearchProgressProps) {
             >
               <div className={`
                 w-7 h-7 rounded-lg flex items-center justify-center
-                ${isActive ? 'bg-cyan-50' : isDone ? 'bg-emerald-50' : 'bg-slate-100'}
+                ${isActive ? 'bg-cyan-50 dark:bg-cyan-950/50' : isDone ? 'bg-emerald-50 dark:bg-emerald-950/50' : 'bg-slate-100 dark:bg-neutral-900'}
               `}>
                 {isActive ? (
                   <Loader2 size={14} className="text-cyan-500 animate-spin" />
                 ) : isDone ? (
                   <Icon size={14} className="text-emerald-500" />
                 ) : (
-                  <Icon size={14} className="text-slate-300" />
+                  <Icon size={14} className="text-slate-300 dark:text-neutral-600" />
                 )}
               </div>
               <div>
                 <p className={`text-[12px] font-medium ${
-                  isActive ? 'text-slate-700' : isDone ? 'text-slate-400' : 'text-slate-300'
+                  isActive ? 'text-slate-800 dark:text-neutral-100' : isDone ? 'text-slate-500 dark:text-neutral-400' : 'text-slate-300 dark:text-neutral-600'
                 }`}>
                   {isDone ? s.label.replace('...', '') : s.label}
                 </p>
@@ -72,7 +72,7 @@ export default function SearchProgress({ step, query }: SearchProgressProps) {
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: 'auto' }}
                       exit={{ opacity: 0, height: 0 }}
-                      className="text-[10px] text-slate-400 mt-0.5"
+                      className="text-[10px] text-slate-400 dark:text-slate-400 mt-0.5"
                     >
                       {s.detail}
                     </motion.p>
