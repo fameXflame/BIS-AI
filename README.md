@@ -545,9 +545,38 @@ OPENAI_API_KEY=your_openai_api_key_here
 
 ---
 
-## 👥 Team
+## 📖 About
 
-Built for the **Smart India Hackathon (SIH)** — Bureau of Indian Standards problem statement.
+### The Problem We're Solving
+
+India's **Bureau of Indian Standards (BIS)** maintains over **25,000 active standards** spanning electronics, civil engineering, food safety, textiles, chemicals, metallurgy, and dozens more technical divisions. For Micro, Small & Medium Enterprises (MSMEs) — which make up **99.7% of Indian enterprises** — identifying which standards apply to their product is a nightmare:
+
+- 📚 Standards are scattered across multiple PDFs, portals, and gazette notifications
+- 🔎 No semantic search exists — only keyword lookup on the BIS portal
+- ⏳ Compliance research takes **days to weeks** of manual effort
+- ❌ Missing a mandatory standard can mean product seizure, penalties, or import rejection
+
+### Our Mission
+
+**BIS AI** was built to **democratize BIS compliance** — making it as simple as describing your product in plain English and receiving instant, AI-ranked, confidence-scored standard recommendations with a full certification roadmap.
+
+### Smart India Hackathon (SIH)
+
+This project was developed for the **Smart India Hackathon** — India's largest open innovation platform where students solve real-world problems posed by government ministries and industry organizations.
+
+- **Problem Statement:** Bureau of Indian Standards — AI-Powered Standard Discovery
+- **Objective:** Build an intelligent system that can recommend the top-5 applicable BIS standards for any product query, achieving >80% Hit Rate @3, >0.7 MRR @5, and <5s latency
+- **Our Result:** 100% Hit Rate @3, 0.9500 MRR @5, 0.42s latency on CPU — **exceeding every target**
+
+### Impact
+
+| Metric | Before BIS AI | After BIS AI |
+|---|---|---|
+| Time to identify applicable standards | Days to weeks | **< 1 second** |
+| Standards coverage per search | Manual lookup, 1-2 at a time | **Up to 8 ranked results** |
+| Expertise required | Deep regulatory knowledge | **Plain English description** |
+| Compliance documentation | Manual report writing | **One-click PDF dossier** |
+| Hardware requirement | — | **Any laptop with a browser** |
 
 ---
 
