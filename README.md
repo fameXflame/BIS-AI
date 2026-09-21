@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="docs/images/landing-dark.jpg" alt="BIS AI — Landing Page" width="100%" />
-</p>
-
 <h1 align="center">🇮🇳 BIS AI — AI-Powered Bureau of Indian Standards Search Engine</h1>
 
 <p align="center">
@@ -69,74 +65,24 @@ Indian Micro, Small & Medium Enterprises (MSMEs) spend **days to weeks** manuall
 
 ---
 
-## ✨ Feature Showcase
+## ✨ Features
 
-### 🌗 Dual Theme — Light & Dark Mode
-
-<p align="center">
-  <img src="docs/images/landing-light.jpg" alt="Light Mode" width="49%" />
-  <img src="docs/images/landing-dark.jpg" alt="Dark Mode" width="49%" />
-</p>
-
-A clean white light mode and a striking pitch-black dark mode with interactive **Three.js particle physics animation** — red, yellow, and blue particles swirling in a cosmic wormhole effect.
-
----
-
-### 🔍 Intelligent Search Results
-
-<p align="center">
-  <img src="docs/images/search-results.jpg" alt="Search Results" width="90%" />
-</p>
-
-- **AI Summary Card** with gradient border — concise compliance overview
-- **Confidence-scored standard cards** — 🟢 High (≥80%) · 🟡 Moderate (60-79%) · 🔵 Low (<60%)
-- **Division filter bar** — filter results by BIS technical department
-- **Search history sidebar** — one-click replay of previous queries
-
----
-
-### ⚖️ Standard Comparison Modal
-
-<p align="center">
-  <img src="docs/images/comparison-modal.jpg" alt="Standard Comparison" width="90%" />
-</p>
-
-Compare two standards side-by-side with AI-generated analysis of:
-- Scope & Applicability differences
-- Key clause divergences
-- Testing requirement variations
-- Legal enforceability comparison
-
----
-
-### 📄 PDF Compliance Dossier Export
-
-<p align="center">
-  <img src="docs/images/pdf-dossier.jpg" alt="PDF Dossier" width="60%" />
-</p>
-
-Generate publication-grade compliance dossiers with:
-- **Standards Compliance Matrix** — IS codes, titles, confidence scores, mandatory QCO badges
-- **4-Phase Certification Roadmap** — from gap analysis to ISI/CRS mark grant
-- **Regulatory disclaimers** — Gazette Notification references
-- **Two-pass PDF rendering** — dynamic page numbering via ReportLab
-
----
-
-### 🎙️ Multimodal Input
-
-| Input Mode | Description |
+| Feature | Description |
 |---|---|
-| ⌨️ **Text Query** | Natural language product description |
+| 🌗 **Dual Theme** | Clean white light mode + pitch-black dark mode with interactive Three.js particle physics animation |
+| 🔍 **Hybrid Search** | 6-stage pipeline: BM25 + Dense Semantic + RRF + Applicability Filter + Neural Reranker + AI Synthesis |
+| 🤖 **AI Summary** | Gemini-powered compliance overview with walk-along regulatory guidance |
+| 📊 **Confidence Scoring** | Color-coded bars — 🟢 High (≥80%) · 🟡 Moderate (60-79%) · 🔵 Low (<60%) |
+| ⚖️ **Standard Comparison** | Side-by-side AI analysis of scope, key clauses, testing requirements, and legal enforceability |
+| 📋 **Clause Q&A** | Interactive assistant for specific technical limits, tolerances, and testing protocols |
+| 📄 **PDF Dossier Export** | Publication-grade compliance dossier with standards matrix and 4-phase certification roadmap |
 | 🎤 **Voice Input** | Browser MediaRecorder → Groq Whisper / Gemini transcription |
-| 📎 **File Upload** | Drag-and-drop PDF, DOCX, TXT, CSV — auto-extract and search |
-
-### 💬 Interactive Clause Q&A
-
-Ask specific questions about any standard's clauses:
-> *"What is the maximum leakage current allowed under IS 302?"*
-
-Get grounded answers with clause citations, mandatory/advisory status, and division context.
+| 📎 **File Upload** | Drag-and-drop PDF, DOCX, TXT, CSV — auto-extract text and search |
+| 🌌 **Particle Animation** | Three.js physics with red, yellow, and blue particles in a cosmic wormhole effect |
+| 🏷️ **Division Filtering** | Filter results by BIS technical department with count badges |
+| 🕐 **Search History** | Persistent sidebar with past queries and one-click replay |
+| ⚡ **Suggestion Pills** | Quick-start query chips for common product categories |
+| 💻 **Zero GPU** | Runs entirely on CPU using ONNX-optimized models — no CUDA required |
 
 ---
 
@@ -565,32 +511,7 @@ Compatible with: **Railway**, **Render**, **Fly.io**, **AWS EC2**, **Google Clou
 | **Audio** | Groq Whisper / Gemini | Voice-to-text transcription |
 | **Deployment** | Netlify (frontend) | Global CDN with auto-deploy |
 
----
 
-## 📊 Competitive Analysis
-
-How BIS AI compares to other BIS Hackathon solutions:
-
-| Feature | **BIS AI** | Competitor |
-|---|---|---|
-| **Standards Indexed** | **1,002** | 559 |
-| **Hit Rate @3** | **100.00%** | 100.00% |
-| **MRR @5** | **0.9500** | 0.9333 |
-| **Avg Latency** | **0.42s** (CPU) | 0.45-0.85s (GPU) |
-| **GPU Required** | **❌ No** | ✅ Yes (CUDA) |
-| **Model Download** | **~50 MB** (ONNX) | ~5 GB (PyTorch) |
-| **Cold Start** | **< 10 seconds** | 5-10 minutes |
-| **Multimodal Input** | ✅ Text + Voice + File | ❌ Text only |
-| **PDF Dossier Export** | ✅ Publication-grade | ❌ None |
-| **Standard Comparison** | ✅ Side-by-side AI analysis | ❌ None |
-| **Clause Q&A** | ✅ Interactive assistant | ❌ None |
-| **Theme Modes** | ✅ Light + Dark | ❌ Single theme |
-| **Particle Animation** | ✅ Three.js physics | ❌ None |
-| **Division Filtering** | ✅ By department | ❌ None |
-| **Search History** | ✅ Persistent sidebar | ❌ None |
-| **Template Fallback** | ✅ Works without API key | ❌ Requires GPU + models |
-
----
 
 ## 📋 Environment Variables
 
