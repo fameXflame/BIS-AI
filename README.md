@@ -17,8 +17,10 @@
   <img src="https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?style=flat-square&logo=tailwindcss" alt="Tailwind CSS" />
   <img src="https://img.shields.io/badge/Python-3.10+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python" />
   <img src="https://img.shields.io/badge/ONNX_Runtime-Optimized-FF6F00?style=flat-square&logo=onnx" alt="ONNX" />
-  <img src="https://img.shields.io/badge/Framer_Motion-Animated-FF0055?style=flat-square&logo=framer" alt="Framer Motion" />
-  <img src="https://img.shields.io/badge/License-SIH_2025-orange?style=flat-square" alt="License" />
+  <img src="https://img.shields.io/badge/Ollama-Offline_AI-black?style=flat-square&logo=ollama" alt="Ollama" />
+  <img src="https://img.shields.io/badge/Groq-Llama_3.3-F55036?style=flat-square" alt="Groq" />
+  <img src="https://img.shields.io/badge/Digital_India-Bhashini_Aligned-138808?style=flat-square" alt="Digital India" />
+  <img src="https://img.shields.io/badge/License-SIH_2026-orange?style=flat-square" alt="License" />
 </p>
 
 ---
@@ -52,6 +54,7 @@ Indian Micro, Small & Medium Enterprises (MSMEs) spend **days to weeks** manuall
 - 📋 **Interactive clause exploration** with Q&A for specific technical requirements
 - ⚖️ **Side-by-side standard comparison** for technical decision-making
 - 📄 **Export-ready PDF compliance dossiers** for audit trails
+- 💻 **100% Sovereign Offline Model Support** via Ollama / LM Studio or cloud APIs (Groq / Gemini / Krutrim)
 
 ### Example Query
 
@@ -69,20 +72,24 @@ Indian Micro, Small & Medium Enterprises (MSMEs) spend **days to weeks** manuall
 
 | Feature | Description |
 |---|---|
+| 🔌 **Universal AI Engine** | Plug-and-play support for **Ollama**, **LM Studio**, **Groq (Free Llama 3)**, **Google Gemini**, **Krutrim (India)**, or **OpenAI** with instant auto-detection |
+| 💻 **100% Offline Models** | Run local models locally via Ollama (`llama3.2`) or LM Studio (`localhost:1234`) with zero cloud data transmission and zero API fees |
+| 🛡️ **Self-Healing Q&A** | 3-tier fallback ensures the interactive Clause Q&A never fails, even if APIs or network are down |
+| ⚙️ **Persistent Config** | Configure your API key or local endpoint once in the browser `localStorage` — persists across all future visits |
 | 🌗 **Dual Theme** | Clean white light mode + pitch-black dark mode with interactive Three.js particle physics animation |
 | 🔍 **Hybrid Search** | 6-stage pipeline: BM25 + Dense Semantic + RRF + Applicability Filter + Neural Reranker + AI Synthesis |
-| 🤖 **AI Summary** | Gemini-powered compliance overview with walk-along regulatory guidance |
+| 🤖 **AI Summary** | Grounded compliance overview with walk-along regulatory guidance |
 | 📊 **Confidence Scoring** | Color-coded bars — 🟢 High (≥80%) · 🟡 Moderate (60-79%) · 🔵 Low (<60%) |
 | ⚖️ **Standard Comparison** | Side-by-side AI analysis of scope, key clauses, testing requirements, and legal enforceability |
 | 📋 **Clause Q&A** | Interactive assistant for specific technical limits, tolerances, and testing protocols |
 | 📄 **PDF Dossier Export** | Publication-grade compliance dossier with standards matrix and 4-phase certification roadmap |
-| 🎤 **Voice Input** | Browser MediaRecorder → Groq Whisper / Gemini transcription |
+| 🎤 **Voice Input** | Browser MediaRecorder → Groq Whisper / Gemini / Bhashini-ready transcription |
 | 📎 **File Upload** | Drag-and-drop PDF, DOCX, TXT, CSV — auto-extract text and search |
 | 🌌 **Particle Animation** | Three.js physics with red, yellow, and blue particles in a cosmic wormhole effect |
 | 🏷️ **Division Filtering** | Filter results by BIS technical department with count badges |
 | 🕐 **Search History** | Persistent sidebar with past queries and one-click replay |
 | ⚡ **Suggestion Pills** | Quick-start query chips for common product categories |
-| 💻 **Zero GPU** | Runs entirely on CPU using ONNX-optimized models — no CUDA required |
+| 💻 **Zero GPU Required** | Core search runs entirely on CPU using ONNX-optimized models — no CUDA required |
 
 ---
 
@@ -234,6 +241,49 @@ BIS AI implements a **6-stage hybrid RAG retrieval pipeline** that combines lexi
 │  Retrieval: 3-tier (exact → base → prefix)  │
 └─────────────────────────────────────────────┘
 ```
+
+---
+
+## 🔌 Universal AI & 100% Offline Local Model Support
+
+BIS AI is built with **zero vendor lock-in**. The platform supports any AI provider—from 100% offline self-hosted open-source models to high-speed cloud APIs and sovereign Indian AI infrastructure.
+
+### Supported Providers & Setup
+
+| Provider | Model / Specs | Endpoint / Key | How to Configure |
+|---|---|---|---|
+| **💻 Ollama (100% Offline)** | `llama3.2`, `qwen2.5`, `deepseek-r1` | `http://localhost:11434/v1` | Set `OLLAMA_ORIGINS="*"` and run `ollama serve`. No API key required! |
+| **💻 LM Studio (100% Offline)** | Any local GGUF model | `http://localhost:1234/v1` | Start Local Server in LM Studio with **CORS: ON**. No API key required! |
+| **⚡ Groq (Ultra-Fast Cloud)** | Llama 3.3 70B & Llama 3.1 8B (500+ tok/s) | Starts with `gsk_...` | **100% Free** at [console.groq.com](https://console.groq.com/keys). Auto-detected! |
+| **✨ Google Gemini** | Gemini 2.5 Flash & 3.5 Flash-Lite | Starts with `AIzaSy...` | Free tier at [aistudio.google.com](https://aistudio.google.com/app/apikey). Auto-detected! |
+| **🇮🇳 Krutrim Cloud** | Krutrim-spectre-v2 (Indian Sovereign AI) | `https://api.krutrimcloud.com/v1` | Indian AI platform by Ola. Select Krutrim in AI Settings modal. |
+| **🤖 OpenAI / OpenRouter** | GPT-4o-mini / DeepSeek / Mistral | Starts with `sk-...` | Standard OpenAI key or custom OpenAI-compatible endpoint. |
+| **🛡️ Built-in Offline Fallback** | Deterministic RAG Rule Engine | **Zero API / Zero Key** | Automatic fallback. Analyzes clauses, numerical tolerances, and QCO status offline. |
+
+### 🚀 Running 100% Offline with Ollama
+
+For complete sovereign data privacy where manufacturing queries never leave your local machine:
+
+```powershell
+# 1. Enable CORS for browser communication (PowerShell)
+$env:OLLAMA_ORIGINS="*"
+ollama serve
+
+# 2. In another terminal, pull and run your model
+ollama run llama3.2
+```
+
+In the BIS AI web interface:
+1. Click **"AI Settings"** in the top navigation bar.
+2. Select **"Custom / Ollama / Local AI"**.
+3. Set Custom Endpoint URL: `http://localhost:11434/v1` (leave API key blank).
+4. Click **"Save Settings"** — your local model now powers all summaries and clause Q&A!
+
+### 🇮🇳 Digital India & Sovereign AI Alignment
+
+For government evaluations and Smart India Hackathon compliance:
+- **Digital India Bhashini (MeitY):** Architected to interface with the National Language Translation Mission for automatic speech recognition across 22 scheduled Indian languages.
+- **Sovereign Local Execution:** The entire 1,002 standards database, dense vector embeddings, and cross-encoder reranker run **100% locally on CPU via ONNX Runtime**—requiring zero foreign cloud GPU infrastructure.
 
 ---
 
@@ -540,7 +590,7 @@ OPENAI_API_KEY=your_openai_api_key_here
 | 4 | AI Synthesis + Multimodal Input (Voice + File) | ✅ Complete |
 | 5 | PDF Dossier + Comparison + Clause Q&A | ✅ Complete |
 | 6 | Official SIH Benchmark — All Targets Passed | ✅ Complete |
-| 7 | Offline Model Support (Ollama + faster-whisper) | 🔜 Planned |
+| 7 | Offline & Universal AI Support (Ollama + LM Studio + Groq + Krutrim) | ✅ Complete |
 | 8 | Mobile App (React Native) | 🔜 Planned |
 
 ---
