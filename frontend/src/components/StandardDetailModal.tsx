@@ -23,6 +23,7 @@ import {
 import { useState } from 'react';
 import type { StandardResult } from '@/lib/types';
 import { askClauseQA } from '@/lib/api';
+import { directGeminiGenerate, clientAnswerClauseQuestion } from '@/lib/geminiClient';
 
 interface StandardDetailModalProps {
   standard: StandardResult | null;
@@ -344,14 +345,57 @@ export default function StandardDetailModal({ standard, onClose }: StandardDetai
                     const question = qaInput.trim();
                     setQaLoading(true);
                     try {
-                      const res = await askClauseQA(standard.is_code, question);
+                      let answer = '';
+                      let citations: string[] = [];
+
+                      // 1. Try calling the backend API
+                      try {
+                        const res = await askClauseQA(standard.is_code, question);
+                        if (res && res.answer) {
+                          answer = res.answer;
+                          citations = res.citations || [];
+                        }
+                      } catch {
+                        // Backend is offline or blocked on static host
+                      }
+
+                      // 2. If backend failed, try direct Gemini with stored key
+                      if (!answer) {
+                        try {
+                          const directPrompt = `You are the Bureau of Indian Standards (BIS) Technical Assistant.
+Standard: ${standard.is_code} - ${standard.title}
+Scope: ${standard.abstract_scope || standard.highlight_reason || ''}
+Key Clauses: ${(standard.key_clauses || []).join('; ')}
+Test Requirements: ${standard.test_requirements || ''}
+Mandatory QCO: ${standard.mandatory ? 'Yes' : 'No'}
+
+Question: "${question}"
+Provide a clear, grounded technical answer citing relevant clauses or test specifications. Keep under 2 paragraphs.`;
+
+                          const geminiText = await directGeminiGenerate(directPrompt);
+                          if (geminiText) {
+                            answer = geminiText;
+                            citations = [standard.is_code];
+                          }
+                        } catch {
+                          // Gemini API error or no key
+                        }
+                      }
+
+                      // 3. Fallback to deterministic grounded rule-engine (guaranteed answer)
+                      if (!answer) {
+                        const fallback = clientAnswerClauseQuestion(standard, question);
+                        answer = fallback.answer;
+                        citations = fallback.citations;
+                      }
+
                       setQaHistory((prev) => [
                         ...prev,
-                        { question, answer: res.answer, citations: res.citations || [] },
+                        { question, answer, citations },
                       ]);
                       setQaInput('');
                     } catch (err) {
-                      console.error(err);
+                      console.error('QA processing error:', err);
                     } finally {
                       setQaLoading(false);
                     }

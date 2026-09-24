@@ -1,7 +1,11 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+import { getStoredApiUrl } from './geminiClient';
+
+function getApiBase(): string {
+  return getStoredApiUrl();
+}
 
 export async function searchStandards(query: string, division?: string) {
-  const res = await fetch(`${API_BASE}/api/search`, {
+  const res = await fetch(`${getApiBase()}/api/search`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -14,7 +18,7 @@ export async function searchStandards(query: string, division?: string) {
 }
 
 export async function getDivisions(): Promise<{ division: string; count: number }[]> {
-  const res = await fetch(`${API_BASE}/api/divisions`);
+  const res = await fetch(`${getApiBase()}/api/divisions`);
   if (!res.ok) throw new Error(`Failed to fetch divisions: ${res.statusText}`);
   return res.json();
 }
@@ -22,7 +26,7 @@ export async function getDivisions(): Promise<{ division: string; count: number 
 export async function uploadFile(file: File) {
   const formData = new FormData();
   formData.append('file', file);
-  const res = await fetch(`${API_BASE}/api/upload-file`, {
+  const res = await fetch(`${getApiBase()}/api/upload-file`, {
     method: 'POST',
     body: formData,
   });
@@ -33,7 +37,7 @@ export async function uploadFile(file: File) {
 export async function transcribeAudio(blob: Blob) {
   const formData = new FormData();
   formData.append('file', blob, 'recording.webm');
-  const res = await fetch(`${API_BASE}/api/transcribe-audio`, {
+  const res = await fetch(`${getApiBase()}/api/transcribe-audio`, {
     method: 'POST',
     body: formData,
   });
@@ -42,13 +46,13 @@ export async function transcribeAudio(blob: Blob) {
 }
 
 export async function getStandardDetail(isCode: string) {
-  const res = await fetch(`${API_BASE}/api/standard/${encodeURIComponent(isCode)}`);
+  const res = await fetch(`${getApiBase()}/api/standard/${encodeURIComponent(isCode)}`);
   if (!res.ok) throw new Error(`Detail fetch failed: ${res.statusText}`);
   return res.json();
 }
 
 export async function exportDossierPdf(query: string, searchResults: any): Promise<Blob> {
-  const res = await fetch(`${API_BASE}/api/export-pdf`, {
+  const res = await fetch(`${getApiBase()}/api/export-pdf`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -61,7 +65,7 @@ export async function exportDossierPdf(query: string, searchResults: any): Promi
 }
 
 export async function compareStandards(standardA: string, standardB: string) {
-  const res = await fetch(`${API_BASE}/api/compare`, {
+  const res = await fetch(`${getApiBase()}/api/compare`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -74,7 +78,7 @@ export async function compareStandards(standardA: string, standardB: string) {
 }
 
 export async function askClauseQA(isCode: string, question: string) {
-  const res = await fetch(`${API_BASE}/api/clause-qa`, {
+  const res = await fetch(`${getApiBase()}/api/clause-qa`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
