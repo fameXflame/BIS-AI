@@ -1,22 +1,53 @@
 /**
- * Direct Client-side AI Engine & Fallback Resolver
- * Supports:
- * 1. Persistent User API Key via localStorage (input once, works permanently)
- * 2. Direct Gemini 2.5 Flash / 3.5 Flash-Lite client calls when backend is offline
- * 3. Deterministic Grounded Clause Q&A fallback when offline
+ * Universal Client-side AI Engine & Fallback Resolver
+ * Supports ANY AI Provider:
+ * 1. Google Gemini (Gemini 2.5 Flash, 3.5 Flash-Lite)
+ * 2. Groq (Free high-speed Llama 3.3 70B & 8B)
+ * 3. Krutrim Cloud (Indian Homegrown AI Stack)
+ * 4. OpenAI & Any OpenAI-Compatible endpoint (DeepSeek, OpenRouter, Ollama, Together)
+ * 5. Deterministic Grounded Clause Q&A Engine (100% offline fallback)
  */
+
+export type AIProvider = 'auto' | 'gemini' | 'groq' | 'openai' | 'krutrim' | 'custom';
 
 export function getStoredApiKey(): string {
   if (typeof window === 'undefined') return '';
-  return localStorage.getItem('bis_gemini_api_key') || '';
+  return localStorage.getItem('bis_ai_api_key') || localStorage.getItem('bis_gemini_api_key') || '';
 }
 
 export function setStoredApiKey(key: string): void {
   if (typeof window === 'undefined') return;
   if (key) {
-    localStorage.setItem('bis_gemini_api_key', key.trim());
+    const trimmed = key.trim();
+    localStorage.setItem('bis_ai_api_key', trimmed);
+    localStorage.setItem('bis_gemini_api_key', trimmed); // backwards compatibility
   } else {
+    localStorage.removeItem('bis_ai_api_key');
     localStorage.removeItem('bis_gemini_api_key');
+  }
+}
+
+export function getStoredProvider(): AIProvider {
+  if (typeof window === 'undefined') return 'auto';
+  return (localStorage.getItem('bis_ai_provider') as AIProvider) || 'auto';
+}
+
+export function setStoredProvider(provider: AIProvider): void {
+  if (typeof window === 'undefined') return;
+  localStorage.setItem('bis_ai_provider', provider);
+}
+
+export function getStoredCustomBaseUrl(): string {
+  if (typeof window === 'undefined') return '';
+  return localStorage.getItem('bis_ai_custom_url') || '';
+}
+
+export function setStoredCustomBaseUrl(url: string): void {
+  if (typeof window === 'undefined') return;
+  if (url) {
+    localStorage.setItem('bis_ai_custom_url', url.trim().replace(/\/$/, ''));
+  } else {
+    localStorage.removeItem('bis_ai_custom_url');
   }
 }
 
@@ -35,15 +66,120 @@ export function setStoredApiUrl(url: string): void {
 }
 
 /**
- * Direct browser call to Gemini API for live client-side responses
+ * Detect provider automatically from key format
  */
-export async function directGeminiGenerate(prompt: string): Promise<string | null> {
+export function detectProvider(key: string): AIProvider {
+  if (!key) return 'auto';
+  const k = key.trim();
+  if (k.startsWith('gsk_')) return 'groq';
+  if (k.startsWith('AIzaSy')) return 'gemini';
+  if (k.startsWith('sk-')) return 'openai';
+  return 'auto';
+}
+
+/**
+ * Universal browser call to ANY AI provider
+ */
+export async function directAIGenerate(prompt: string): Promise<string | null> {
   const apiKey = getStoredApiKey();
   if (!apiKey) return null;
 
-  const models = ['gemini-2.5-flash', 'gemini-3.5-flash-lite', 'gemini-flash-latest'];
+  let provider = getStoredProvider();
+  if (provider === 'auto') {
+    provider = detectProvider(apiKey);
+    if (provider === 'auto') {
+      // Default guess: if key has 39 chars or starts with AI, try Gemini first, else OpenAI
+      provider = apiKey.startsWith('AI') ? 'gemini' : 'openai';
+    }
+  }
 
-  for (const model of models) {
+  // 1. GROQ (Free, fast Llama 3)
+  if (provider === 'groq') {
+    try {
+      const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify({
+          model: 'llama-3.3-70b-versatile',
+          messages: [{ role: 'user', content: prompt }],
+          temperature: 0.2,
+          max_tokens: 500,
+        }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const text = data.choices?.[0]?.message?.content;
+        if (text) return text.trim();
+      }
+    } catch {
+      // fallback
+    }
+  }
+
+  // 2. KRUTRIM (Indian Sovereign AI)
+  if (provider === 'krutrim') {
+    try {
+      const res = await fetch('https://api.krutrimcloud.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify({
+          model: 'Krutrim-spectre-v2',
+          messages: [{ role: 'user', content: prompt }],
+          temperature: 0.2,
+          max_tokens: 500,
+        }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const text = data.choices?.[0]?.message?.content;
+        if (text) return text.trim();
+      }
+    } catch {
+      // fallback
+    }
+  }
+
+  // 3. OPENAI or ANY OPENAI-COMPATIBLE ENDPOINT (Ollama / DeepSeek / OpenRouter)
+  if (provider === 'openai' || provider === 'custom') {
+    const customBase = getStoredCustomBaseUrl();
+    const baseUrl = customBase || 'https://api.openai.com/v1';
+    try {
+      const res = await fetch(`${baseUrl}/chat/completions`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify({
+          model: customBase.includes('groq')
+            ? 'llama-3.3-70b-versatile'
+            : customBase.includes('ollama')
+            ? 'llama3.2'
+            : 'gpt-4o-mini',
+          messages: [{ role: 'user', content: prompt }],
+          temperature: 0.2,
+          max_tokens: 500,
+        }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const text = data.choices?.[0]?.message?.content;
+        if (text) return text.trim();
+      }
+    } catch {
+      // fallback
+    }
+  }
+
+  // 4. GOOGLE GEMINI
+  const geminiModels = ['gemini-2.5-flash', 'gemini-3.5-flash-lite', 'gemini-flash-latest'];
+  for (const model of geminiModels) {
     try {
       const res = await fetch(
         `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
@@ -66,11 +202,18 @@ export async function directGeminiGenerate(prompt: string): Promise<string | nul
         if (text) return text.trim();
       }
     } catch {
-      // Continue to next model fallback
+      // fallback
     }
   }
 
   return null;
+}
+
+/**
+ * Backward compatibility alias
+ */
+export async function directGeminiGenerate(prompt: string): Promise<string | null> {
+  return directAIGenerate(prompt);
 }
 
 /**
