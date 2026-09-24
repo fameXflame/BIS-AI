@@ -44,17 +44,17 @@ export default function StandardCard({ standard, rank, onClick }: StandardCardPr
       onClick={onClick}
       className="bg-white dark:bg-black rounded-xl cursor-pointer overflow-hidden group border-[1.5px] border-slate-300 dark:border-neutral-800 hover:border-slate-500 dark:hover:border-neutral-700 shadow-sm hover:shadow-md transition-all"
     >
-      <div className="p-4">
+      <div className="p-3 sm:p-4">
         {/* Top row: rank badge + IS code + copy + confidence badge */}
-        <div className="flex items-center gap-2 mb-2">
-          <span className="text-[11px] font-bold text-slate-400 dark:text-neutral-500 w-4 text-center">
+        <div className="flex items-center gap-1.5 sm:gap-2 mb-2">
+          <span className="text-[10.5px] sm:text-[11px] font-bold text-slate-400 dark:text-neutral-500 w-3.5 sm:w-4 text-center">
             #{rank}
           </span>
-          <span className="text-[13px] font-bold text-blue-700 dark:text-blue-400 tracking-wide">
+          <span className="text-[12px] sm:text-[13px] font-bold text-blue-700 dark:text-blue-400 tracking-wide">
             {standard.is_code}
           </span>
           {standard.mandatory && (
-            <span className="text-[9.5px] font-bold px-1.5 py-0.2 rounded bg-rose-50 dark:bg-rose-950/50 text-rose-700 dark:text-rose-400 border border-rose-200 dark:border-rose-800 uppercase tracking-wider">
+            <span className="text-[9px] sm:text-[9.5px] font-bold px-1.5 py-0.2 rounded bg-rose-50 dark:bg-rose-950/50 text-rose-700 dark:text-rose-400 border border-rose-200 dark:border-rose-800 uppercase tracking-wider">
               Mandatory
             </span>
           )}
@@ -63,32 +63,32 @@ export default function StandardCard({ standard, rank, onClick }: StandardCardPr
             className="p-1 rounded-md text-slate-400 dark:text-neutral-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-neutral-900 transition-all"
             title="Copy standard code"
           >
-            {copied ? <Check size={12} className="text-emerald-500" /> : <Copy size={12} />}
+            {copied ? <Check size={11} className="text-emerald-500 sm:w-3 sm:h-3" /> : <Copy size={11} className="sm:w-3 sm:h-3" />}
           </button>
-          <div className="ml-auto flex items-center gap-1.5">
-            <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-md shadow-xs tracking-wide ${confidenceStyle.badge}`}>
+          <div className="ml-auto flex items-center gap-1">
+            <span className={`text-[10px] sm:text-[11px] font-bold px-2 sm:px-2.5 py-0.5 rounded-md shadow-xs tracking-wide ${confidenceStyle.badge}`}>
               {standard.confidence}% match
             </span>
           </div>
         </div>
 
         {/* Title */}
-        <h3 className="text-[13.5px] font-semibold text-slate-900 dark:text-white mb-1.5 leading-snug pl-6">
+        <h3 className="text-[12.5px] sm:text-[13.5px] font-semibold text-slate-900 dark:text-white mb-1 sm:mb-1.5 leading-snug pl-3 sm:pl-6">
           {standard.title}
         </h3>
 
         {/* Highlight reason */}
-        <p className="text-[11.5px] text-slate-700 dark:text-neutral-300 leading-relaxed mb-3 pl-6">
+        <p className="text-[11px] sm:text-[11.5px] text-slate-700 dark:text-neutral-300 leading-relaxed mb-2.5 sm:mb-3 pl-3 sm:pl-6">
           {standard.highlight_reason}
         </p>
 
         {/* Key clauses pills */}
         {standard.key_clauses.length > 0 && (
-          <div className="flex flex-wrap gap-1.5 mb-3 pl-6">
+          <div className="flex flex-wrap gap-1 sm:gap-1.5 mb-2.5 sm:mb-3 pl-3 sm:pl-6">
             {standard.key_clauses.slice(0, 3).map((clause) => (
               <span
                 key={clause}
-                className="px-2 py-0.5 rounded-md text-[9.5px] font-medium bg-slate-100 dark:bg-neutral-900 border border-slate-300 dark:border-neutral-800 text-slate-700 dark:text-neutral-300"
+                className="px-1.5 sm:px-2 py-0.5 rounded-md text-[9px] sm:text-[9.5px] font-medium bg-slate-100 dark:bg-neutral-900 border border-slate-300 dark:border-neutral-800 text-slate-700 dark:text-neutral-300"
               >
                 {clause}
               </span>
@@ -97,8 +97,8 @@ export default function StandardCard({ standard, rank, onClick }: StandardCardPr
         )}
 
         {/* Explore action */}
-        <div className="flex items-center justify-between pl-6 pt-1">
-          <span className="text-[11px] font-semibold text-slate-600 dark:text-neutral-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors flex items-center gap-1">
+        <div className="flex items-center justify-between pl-3 sm:pl-6 pt-0.5 sm:pt-1">
+          <span className="text-[10.5px] sm:text-[11px] font-semibold text-slate-600 dark:text-neutral-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors flex items-center gap-1">
             Explore standard <ArrowRight size={11} className="group-hover:translate-x-0.5 transition-transform text-blue-600 dark:text-blue-400" />
           </span>
         </div>

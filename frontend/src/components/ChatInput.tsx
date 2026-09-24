@@ -133,9 +133,9 @@ export default function ChatInput({
         dark:focus-within:shadow-[0_0_28px_rgba(59,130,246,0.35)]
         transition-all duration-300
       ">
-        <div className="flex items-center gap-2 px-4 py-2.5">
+        <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-1.5 sm:py-2.5">
           {/* Left action buttons */}
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-0.5 sm:gap-1">
             <input
               type="file"
               ref={fileInputRef}
@@ -145,21 +145,25 @@ export default function ChatInput({
             />
             <button
               onClick={() => fileInputRef.current?.click()}
-              className="p-2 rounded-full text-slate-400 dark:text-neutral-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-neutral-900 transition-all duration-200 cursor-pointer"
+              className="p-1.5 sm:p-2 rounded-full text-slate-400 dark:text-neutral-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-neutral-900 transition-all duration-200 cursor-pointer"
               title="Attach document / specification sheet"
             >
-              <Paperclip size={17} />
+              <Paperclip size={15} className="sm:w-[17px] sm:h-[17px]" />
             </button>
             <button
               onClick={toggleRecording}
-              className={`p-2 rounded-full transition-all duration-200 cursor-pointer ${
+              className={`p-1.5 sm:p-2 rounded-full transition-all duration-200 cursor-pointer ${
                 isRecording
                   ? 'text-red-500 bg-red-50 dark:bg-red-950/40 recording-pulse'
                   : 'text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:bg-blue-50/60 dark:hover:bg-neutral-900'
               }`}
               title={isRecording ? 'Stop recording' : 'Voice search'}
             >
-              {isRecording ? <MicOff size={17} /> : <Mic size={17} />}
+              {isRecording ? (
+                <MicOff size={15} className="sm:w-[17px] sm:h-[17px]" />
+              ) : (
+                <Mic size={15} className="sm:w-[17px] sm:h-[17px]" />
+              )}
             </button>
           </div>
 
@@ -170,17 +174,17 @@ export default function ChatInput({
             onChange={(e) => setQuery(e.target.value)}
             onInput={handleInput}
             onKeyDown={handleKeyDown}
-            placeholder="Ask about BIS standards — try 'electric kettle manufacturing requirements'..."
+            placeholder={compact ? "Ask BIS AI..." : "Ask BIS AI — e.g. 'electric kettle safety'..."}
             rows={1}
             disabled={isLoading}
             style={{ outline: 'none', boxShadow: 'none', border: 'none' }}
             className="
               flex-1 bg-transparent resize-none
-              text-[13.5px] leading-normal text-slate-800 dark:text-neutral-100
+              text-[12.5px] sm:text-[13.5px] leading-normal text-slate-800 dark:text-neutral-100
               placeholder:text-slate-400 dark:placeholder:text-neutral-500 font-normal
               border-0 outline-none ring-0
               focus:outline-none focus:ring-0 focus:border-0
-              py-1
+              py-0.5 sm:py-1
               disabled:opacity-40
             "
           />
@@ -190,7 +194,7 @@ export default function ChatInput({
             onClick={handleSubmit}
             disabled={!canSubmit}
             className={`
-              w-10 h-10 rounded-full flex items-center justify-center shrink-0
+              w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center shrink-0
               transition-all duration-200 shadow-md
               ${canSubmit
                 ? 'bg-[#2563eb] hover:bg-[#1d4ed8] text-white shadow-blue-500/25 hover:scale-105 active:scale-95 cursor-pointer'
@@ -199,7 +203,7 @@ export default function ChatInput({
             `}
             title="Search Standards"
           >
-            <Send size={15} className={canSubmit ? 'translate-x-[1px]' : ''} />
+            <Send size={13} className={`sm:w-[15px] sm:h-[15px] ${canSubmit ? 'translate-x-[1px]' : ''}`} />
           </button>
         </div>
       </div>

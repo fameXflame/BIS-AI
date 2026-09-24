@@ -187,7 +187,7 @@ export default function Home() {
   );
 
   return (
-    <main className="relative h-screen w-screen overflow-hidden bg-white dark:bg-black text-slate-900 dark:text-white transition-colors duration-300 select-none">
+    <main className="relative h-[100dvh] min-h-[100dvh] w-full overflow-hidden bg-white dark:bg-black text-slate-900 dark:text-white transition-colors duration-300 select-none flex flex-col justify-between">
       {/* Perimeter focus vignette */}
       <div className="vignette-center-focus absolute inset-0 z-20 pointer-events-none" />
 
@@ -197,10 +197,12 @@ export default function Home() {
       </div>
 
       {/* App chrome */}
-      <div className="relative z-30 h-full flex flex-col justify-between">
+      <div className="relative z-30 h-full flex flex-col justify-between overflow-hidden">
         <Header
           onToggleSidebar={() => setSidebarOpen((o) => !o)}
           hasHistory={history.length > 0}
+          theme={theme}
+          onToggleTheme={toggleTheme}
         />
 
         <AnimatePresence mode="wait">
@@ -212,7 +214,7 @@ export default function Home() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0, y: -16 }}
               transition={{ duration: 0.4 }}
-              className="relative flex-1 flex flex-col items-center justify-center px-4 w-full -mt-4"
+              className="relative flex-1 flex flex-col items-center justify-center px-3 sm:px-4 w-full overflow-y-auto sm:overflow-y-visible py-2 sm:py-0 -mt-2 sm:-mt-4"
             >
               {/* Giant Watermark Text "BIS" in the right background */}
               <div 
@@ -271,15 +273,15 @@ export default function Home() {
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.15, duration: 0.6 }}
-                  className="text-center mb-6 flex flex-col items-center"
+                  className="text-center mb-3 sm:mb-6 flex flex-col items-center"
                 >
-                  <div className="relative inline-block mb-1.5">
-                    <h1 className="text-6xl md:text-[5.2rem] font-black tracking-tight text-slate-950 dark:text-white flex items-center justify-center gap-2.5 leading-none transition-colors dark:drop-shadow-[0_0_18px_rgba(59,130,246,0.35)]">
+                  <div className="relative inline-block mb-1 sm:mb-1.5">
+                    <h1 className="text-4xl sm:text-6xl md:text-[5.2rem] font-black tracking-tight text-slate-950 dark:text-white flex items-center justify-center gap-1.5 sm:gap-2.5 leading-none transition-colors dark:drop-shadow-[0_0_18px_rgba(59,130,246,0.35)]">
                       <span>BIS</span>
                       <span className="text-[#1d4ed8] dark:text-[#3b82f6] font-black">AI</span>
                       {/* 4-point sparkle icon matching mockup */}
                       <svg
-                        className="w-8 h-8 text-[#2563eb] dark:text-[#60a5fa] fill-current animate-pulse -mt-8 ml-0.5 shrink-0 dark:drop-shadow-[0_0_10px_rgba(59,130,246,0.5)]"
+                        className="w-5 h-5 sm:w-8 sm:h-8 text-[#2563eb] dark:text-[#60a5fa] fill-current animate-pulse -mt-5 sm:-mt-8 ml-0.5 shrink-0 dark:drop-shadow-[0_0_10px_rgba(59,130,246,0.5)]"
                         viewBox="0 0 24 24"
                       >
                         <path d="M12 0C12 6.627 6.627 12 0 12C6.627 12 12 17.373 12 24C12 17.373 17.373 12 24 12C17.373 12 12 6.627 12 0Z" />
@@ -287,26 +289,27 @@ export default function Home() {
                     </h1>
                   </div>
 
-                  <h2 className="text-[17px] md:text-[19px] font-bold text-slate-900 dark:text-slate-100 tracking-tight mt-1 mb-1 transition-colors">
+                  <h2 className="text-[13px] sm:text-[17px] md:text-[19px] font-bold text-slate-900 dark:text-slate-100 tracking-tight mt-0.5 sm:mt-1 mb-0.5 sm:mb-1 transition-colors">
                     Your Intelligent Companion for Indian Standards
                   </h2>
-                  <p className="text-xs md:text-[13px] text-slate-600 dark:text-slate-400 font-medium max-w-md mx-auto leading-relaxed transition-colors">
+                  {/* Tagline quote hidden on mobile phone */}
+                  <p className="hidden sm:block text-xs md:text-[13px] text-slate-600 dark:text-slate-400 font-medium max-w-md mx-auto leading-relaxed transition-colors">
                     Search. Understand. Apply. Build a Safer, Stronger India.
                   </p>
 
                   {/* Static Status Indicator Badge */}
-                  <div className="mt-4 flex items-center gap-2">
+                  <div className="mt-2.5 sm:mt-4 flex items-center gap-2">
                     <div
                       className="
-                        inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full
+                        inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full
                         bg-slate-900 dark:bg-black text-white dark:text-neutral-200
                         border border-slate-700 dark:border-neutral-800
-                        shadow-xs text-xs font-semibold select-none transition-colors
+                        shadow-xs text-[10.5px] sm:text-xs font-semibold select-none transition-colors
                       "
                     >
-                      <span className="relative flex h-2 w-2">
+                      <span className="relative flex h-1.5 w-1.5 sm:h-2 sm:w-2">
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
+                        <span className="relative inline-flex rounded-full h-1.5 w-1.5 sm:h-2 sm:w-2 bg-emerald-400"></span>
                       </span>
                       <span>25,000+ BIS standards indexed</span>
                     </div>
@@ -388,9 +391,9 @@ export default function Home() {
                         divisions={divisions}
                       />
 
-                      <div className="flex items-center justify-between px-1 pb-1 pt-0.5">
-                        <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
-                          Applicable Standards (
+                      <div className="flex flex-wrap items-center justify-between gap-1.5 px-1 pb-1 pt-0.5">
+                        <span className="text-[10.5px] sm:text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
+                          Standards (
                           {results.standards.filter(
                             (s) =>
                               selectedDivision === 'All' ||
@@ -398,22 +401,22 @@ export default function Home() {
                           ).length}
                           )
                         </span>
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1.5 sm:gap-2">
                           <button
                             onClick={() => {
                               setComparisonTargetA(results.standards[0] || null);
                               setComparisonOpen(true);
                             }}
                             className="
-                              inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg
+                              inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg
                               bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200
-                              text-[11.5px] font-semibold transition-all shadow-2xs
+                              text-[10.5px] sm:text-[11.5px] font-semibold transition-all shadow-2xs
                               cursor-pointer
                             "
                             title="Side-by-side RAG comparison between two standards"
                           >
-                            <ArrowRightLeft size={13} className="text-blue-600" />
-                            <span>Compare Standards</span>
+                            <ArrowRightLeft size={12} className="text-blue-600 sm:w-[13px] sm:h-[13px]" />
+                            <span>Compare</span>
                           </button>
                           <ExportChecklistButton results={results} query={currentQuery} />
                         </div>
@@ -478,12 +481,13 @@ export default function Home() {
         </AnimatePresence>
 
         {/* Footer bar matching reference mockup */}
-        <footer className="relative z-30 w-full px-6 py-2.5 shrink-0 flex items-center justify-between gap-4 text-slate-500 dark:text-neutral-400 text-xs border-t border-slate-200/80 dark:border-neutral-800/80 bg-white/80 dark:bg-black/95 backdrop-blur-md transition-colors">
+        <footer className="relative z-30 w-full px-3 sm:px-6 py-1.5 sm:py-2.5 shrink-0 flex items-center justify-between gap-2 sm:gap-4 text-slate-500 dark:text-neutral-400 text-[10.5px] sm:text-xs border-t border-slate-200/80 dark:border-neutral-800/80 bg-white/80 dark:bg-black/95 backdrop-blur-md transition-colors">
           {/* Left: Copyright */}
-          <div className="flex items-center gap-2 text-[11px] text-slate-500 dark:text-neutral-400 font-normal">
+          <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-[11px] text-slate-500 dark:text-neutral-400 font-normal">
             <span className="font-semibold text-slate-700 dark:text-neutral-300">&copy; BIS AI</span>
             <span className="text-slate-300 dark:text-neutral-800">|</span>
             <span className="hidden sm:inline">Knowledge for a Safer, Stronger India</span>
+            <span className="sm:hidden font-mono text-slate-400 dark:text-neutral-500">v1.0</span>
           </div>
 
           {/* Center: Three Feature Highlights */}
@@ -520,39 +524,13 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Right: Version, Made in India, and Theme Toggle */}
-          <div className="flex items-center gap-3 text-[11px] text-slate-500 dark:text-neutral-400">
+          {/* Right: Version and Made in India */}
+          <div className="flex items-center gap-2 sm:gap-3 text-[10px] sm:text-[11px] text-slate-500 dark:text-neutral-400">
             <span className="font-mono text-slate-400 dark:text-neutral-500 hidden sm:inline">v1.0</span>
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-100 dark:bg-black border border-slate-200/80 dark:border-neutral-800 text-[10.5px] font-medium text-slate-600 dark:text-neutral-300">
+            <div className="inline-flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-slate-100 dark:bg-black border border-slate-200/80 dark:border-neutral-800 text-[9.5px] sm:text-[10.5px] font-medium text-slate-600 dark:text-neutral-300">
               <span>🇮🇳</span>
               <span className="hidden sm:inline">Made in India</span>
             </div>
-
-            {/* Theme Switcher Button */}
-            <button
-              type="button"
-              onClick={toggleTheme}
-              className="
-                inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full
-                bg-slate-100 hover:bg-slate-200 dark:bg-black dark:hover:bg-neutral-900
-                text-slate-800 dark:text-neutral-100 border border-slate-300 dark:border-neutral-800
-                text-[11.5px] font-semibold transition-all cursor-pointer shadow-xs hover:scale-105 active:scale-95 ml-1
-              "
-              title={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
-              aria-label="Toggle Dark/Light Mode"
-            >
-              {theme === 'light' ? (
-                <>
-                  <Moon size={13} className="text-slate-700" />
-                  <span>Dark Mode</span>
-                </>
-              ) : (
-                <>
-                  <Sun size={13} className="text-amber-400" />
-                  <span>Light Mode</span>
-                </>
-              )}
-            </button>
           </div>
         </footer>
       </div>

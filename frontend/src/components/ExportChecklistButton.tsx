@@ -121,38 +121,42 @@ export default function ExportChecklistButton({ results, query }: ExportChecklis
   };
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-1.5 sm:gap-2">
       <button
         onClick={handleDownloadPdf}
         disabled={downloading}
         className="
-          inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg
+          inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg
           bg-slate-900 text-white hover:bg-slate-800 disabled:opacity-75
-          text-[11.5px] font-medium transition-all shadow-xs
+          text-[10.5px] sm:text-[11.5px] font-medium transition-all shadow-xs
           cursor-pointer
         "
         title="Download Official Publication-Grade BIS Compliance Dossier (PDF)"
       >
         {downloading ? (
-          <Loader2 size={13} className="animate-spin text-cyan-400" />
+          <Loader2 size={12} className="animate-spin text-cyan-400 sm:w-[13px] sm:h-[13px]" />
         ) : (
-          <Download size={13} className="text-cyan-400" />
+          <Download size={12} className="text-cyan-400 sm:w-[13px] sm:h-[13px]" />
         )}
-        <span>{downloading ? 'Building Dossier...' : 'Download PDF Dossier'}</span>
+        <span>{downloading ? 'Building...' : 'PDF Dossier'}</span>
       </button>
 
       <button
         onClick={handleCopyMarkdown}
         className="
-          inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg
+          inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg
           bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-700 hover:border-slate-400
-          text-[11.5px] font-medium transition-all shadow-xs
+          text-[10.5px] sm:text-[11.5px] font-medium transition-all shadow-xs
           cursor-pointer
         "
         title="Copy structured compliance checklist in Markdown"
       >
-        {copied ? <Check size={13} className="text-emerald-600 dark:text-emerald-400" /> : <Copy size={13} />}
-        <span>{copied ? 'Copied Checklist' : 'Copy Checklist'}</span>
+        {copied ? (
+          <Check size={12} className="text-emerald-600 dark:text-emerald-400 sm:w-[13px] sm:h-[13px]" />
+        ) : (
+          <Copy size={12} className="sm:w-[13px] sm:h-[13px]" />
+        )}
+        <span>{copied ? 'Copied' : 'Checklist'}</span>
       </button>
     </div>
   );
