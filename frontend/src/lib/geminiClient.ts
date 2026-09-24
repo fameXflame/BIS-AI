@@ -81,20 +81,71 @@ export function detectProvider(key: string): AIProvider {
  * Universal browser call to ANY AI provider
  */
 export async function directAIGenerate(prompt: string): Promise<string | null> {
-  const apiKey = getStoredApiKey();
-  if (!apiKey) return null;
+  const storedKey = getStoredApiKey();
+  const provider = getStoredProvider();
+  const customBase = getStoredCustomBaseUrl();
 
-  let provider = getStoredProvider();
-  if (provider === 'auto') {
-    provider = detectProvider(apiKey);
-    if (provider === 'auto') {
-      // Default guess: if key has 39 chars or starts with AI, try Gemini first, else OpenAI
-      provider = apiKey.startsWith('AI') ? 'gemini' : 'openai';
+  // If local custom provider (Ollama / LM Studio), API key is optional
+  const isLocalOrCustom = provider === 'custom' || customBase.length > 0;
+  if (!storedKey && !isLocalOrCustom) return null;
+
+  const apiKey = storedKey || 'local-ai';
+
+  let effectiveProvider = provider;
+  if (effectiveProvider === 'auto') {
+    if (isLocalOrCustom) {
+      effectiveProvider = 'custom';
+    } else {
+      effectiveProvider = detectProvider(apiKey);
+      if (effectiveProvider === 'auto') {
+        effectiveProvider = apiKey.startsWith('AI') ? 'gemini' : 'openai';
+      }
     }
   }
 
-  // 1. GROQ (Free, fast Llama 3)
-  if (provider === 'groq') {
+  // 1. OLLAMA / LM STUDIO / OPENAI-COMPATIBLE CUSTOM ENDPOINT
+  if (effectiveProvider === 'custom' || effectiveProvider === 'openai') {
+    let baseUrl = customBase || 'https://api.openai.com/v1';
+    if (!baseUrl.endsWith('/v1') && !baseUrl.includes('/chat/completions')) {
+      baseUrl = baseUrl.replace(/\/$/, '') + '/v1';
+    }
+
+    // Determine model identifier
+    let modelName = 'gpt-4o-mini';
+    if (baseUrl.includes('11434') || baseUrl.includes('ollama')) {
+      modelName = 'llama3.2'; // Standard Ollama default
+    } else if (baseUrl.includes('1234') || baseUrl.includes('lmstudio')) {
+      modelName = 'default'; // LM Studio routes to loaded model
+    } else if (baseUrl.includes('groq')) {
+      modelName = 'llama-3.3-70b-versatile';
+    }
+
+    try {
+      const res = await fetch(`${baseUrl}/chat/completions`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify({
+          model: modelName,
+          messages: [{ role: 'user', content: prompt }],
+          temperature: 0.2,
+          max_tokens: 500,
+        }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const text = data.choices?.[0]?.message?.content;
+        if (text) return text.trim();
+      }
+    } catch (err) {
+      console.warn('Custom/Local AI endpoint error:', err);
+    }
+  }
+
+  // 2. GROQ (Free, fast Llama 3)
+  if (effectiveProvider === 'groq') {
     try {
       const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST',
@@ -119,8 +170,8 @@ export async function directAIGenerate(prompt: string): Promise<string | null> {
     }
   }
 
-  // 2. KRUTRIM (Indian Sovereign AI)
-  if (provider === 'krutrim') {
+  // 3. KRUTRIM (Indian Sovereign AI)
+  if (effectiveProvider === 'krutrim') {
     try {
       const res = await fetch('https://api.krutrimcloud.com/v1/chat/completions', {
         method: 'POST',
@@ -130,38 +181,6 @@ export async function directAIGenerate(prompt: string): Promise<string | null> {
         },
         body: JSON.stringify({
           model: 'Krutrim-spectre-v2',
-          messages: [{ role: 'user', content: prompt }],
-          temperature: 0.2,
-          max_tokens: 500,
-        }),
-      });
-      if (res.ok) {
-        const data = await res.json();
-        const text = data.choices?.[0]?.message?.content;
-        if (text) return text.trim();
-      }
-    } catch {
-      // fallback
-    }
-  }
-
-  // 3. OPENAI or ANY OPENAI-COMPATIBLE ENDPOINT (Ollama / DeepSeek / OpenRouter)
-  if (provider === 'openai' || provider === 'custom') {
-    const customBase = getStoredCustomBaseUrl();
-    const baseUrl = customBase || 'https://api.openai.com/v1';
-    try {
-      const res = await fetch(`${baseUrl}/chat/completions`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${apiKey}`,
-        },
-        body: JSON.stringify({
-          model: customBase.includes('groq')
-            ? 'llama-3.3-70b-versatile'
-            : customBase.includes('ollama')
-            ? 'llama3.2'
-            : 'gpt-4o-mini',
           messages: [{ role: 'user', content: prompt }],
           temperature: 0.2,
           max_tokens: 500,
