@@ -18,6 +18,7 @@ import { ArrowRightLeft, FileText, Cpu, ShieldCheck, Sun, Moon } from 'lucide-re
 import type { SearchResult, StandardResult, ChatMessage } from '@/lib/types';
 import { searchBISStandards } from '@/lib/searchEngine';
 import { searchStandards, uploadFile, transcribeAudio, getDivisions } from '@/lib/api';
+import { generateLiveSummary } from '@/lib/geminiClient';
 
 export default function Home() {
   const [view, setView] = useState<'landing' | 'loading' | 'results'>('landing');
@@ -65,9 +66,14 @@ export default function Home() {
 
     const activeDivision = division !== undefined ? division : undefined;
 
-    // Kicking off backend request in parallel with progress visualization
+    // Kicking off backend request and live Gemini summary in parallel with progress visualization
     const apiPromise = searchStandards(query, activeDivision).catch((err) => {
       console.warn('Backend search failed or offline, falling back to local engine:', err);
+      return null;
+    });
+
+    const liveAiPromise = generateLiveSummary(query).catch((err) => {
+      console.warn('Live Gemini summary unavailable:', err);
       return null;
     });
 
@@ -77,10 +83,24 @@ export default function Home() {
       setLoadingStep(i + 1);
     }
 
-    const backendData = await apiPromise;
+    const [backendData, liveSummary] = await Promise.all([
+      apiPromise,
+      Promise.race([
+        liveAiPromise,
+        new Promise<null>((r) => setTimeout(() => r(null), 600)),
+      ]),
+    ]);
+
     const finalData = backendData && (backendData.summary !== undefined || backendData.standards !== undefined)
       ? backendData
       : searchBISStandards(query);
+
+    // If live Gemini generated an answer, use it to ensure a live, conversational, and direct response!
+    if (liveSummary && liveSummary.trim().length > 10) {
+      if (!finalData.standards || finalData.standards.length === 0 || !finalData.is_bis_related) {
+        finalData.summary = liveSummary.trim();
+      }
+    }
 
     setResults(finalData);
     setHistory((prev) => [

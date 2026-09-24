@@ -55,30 +55,35 @@ export function setStoredApiUrl(url: string): void {
 }
 
 /**
- * Direct call to Gemini 3.5 Flash-Lite
+ * Direct call to Gemini 3.5 Flash-Lite / Flash
  */
-export async function directGeminiGenerate(prompt: string): Promise<string | null> {
+export async function directGeminiGenerate(prompt: string, maxTokens = 800): Promise<string | null> {
   const apiKey = getStoredApiKey();
   if (!apiKey) return null;
 
-  const models = ['gemini-3.5-flash-lite', 'gemini-flash-latest'];
+  const models = ['gemini-flash-lite-latest', 'gemini-3.5-flash-lite', 'gemini-flash-latest'];
 
   for (const model of models) {
     try {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 3500);
+
       const res = await fetch(
         `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
+          signal: controller.signal,
           body: JSON.stringify({
             contents: [{ parts: [{ text: prompt }] }],
             generationConfig: {
-              temperature: 0.15,
-              maxOutputTokens: 800,
+              temperature: 0.2,
+              maxOutputTokens: maxTokens,
             },
           }),
         }
       );
+      clearTimeout(timer);
 
       if (res.ok) {
         const data = await res.json();
@@ -91,6 +96,14 @@ export async function directGeminiGenerate(prompt: string): Promise<string | nul
   }
 
   return null;
+}
+
+/**
+ * Generate a short, live, intelligent answer (1-2 sentences) for any query
+ */
+export async function generateLiveSummary(query: string): Promise<string | null> {
+  const prompt = `You are BIS AI, an intelligent assistant for Indian standards, engineering, and manufacturing compliance. In 1 to 2 concise sentences (maximum 40 words total), directly answer or provide regulatory/manufacturing context in India for: "${query}". Keep it helpful, conversational, live, and crisp. Never use asterisks, hashes, or bullet points.`;
+  return await directGeminiGenerate(prompt, 120);
 }
 
 /**
