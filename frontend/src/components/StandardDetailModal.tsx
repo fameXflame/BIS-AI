@@ -364,13 +364,16 @@ export default function StandardDetailModal({ standard, onClose }: StandardDetai
                         try {
                           const directPrompt = `You are the Bureau of Indian Standards (BIS) Technical Assistant.
 Standard: ${standard.is_code} - ${standard.title}
-Scope: ${standard.abstract_scope || standard.highlight_reason || ''}
 Key Clauses: ${(standard.key_clauses || []).join('; ')}
-Test Requirements: ${standard.test_requirements || ''}
-Mandatory QCO: ${standard.mandatory ? 'Yes' : 'No'}
+Test Protocols: ${standard.test_requirements || ''}
+Mandatory QCO Status: ${standard.mandatory ? 'Mandatory under Quality Control Order' : 'Voluntary'}
 
-Question: "${question}"
-Provide a clear, grounded technical answer citing relevant clauses or test specifications. Keep under 2 paragraphs.`;
+User Question: "${question}"
+
+Provide a precise, authoritative engineering answer:
+1. Cite specific clause numbers (e.g. Clause 13, Clause 16, Clause 5, etc.).
+2. State exact numerical thresholds, allowable tolerances, or test conditions (voltages, temperatures, limits, percentages).
+3. Format with clear bullet points and bold technical terms. Keep under 3 concise paragraphs.`;
 
                           const geminiText = await directGeminiGenerate(directPrompt);
                           if (geminiText) {
