@@ -37,6 +37,15 @@ export default function AIResponse({
         .trim()
     : '';
 
+  const cleanWalkalong = aiWalkalong
+    ? aiWalkalong
+        .replace(/\*\*/g, '')
+        .replace(/#{1,6}\s*/g, '')
+        .replace(/`{1,3}/g, '')
+        .replace(/---/g, '')
+        .trim()
+    : '';
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
@@ -50,14 +59,14 @@ export default function AIResponse({
           <div className={`w-6 h-6 rounded-lg flex items-center justify-center shadow-xs ${
             isBisRelated
               ? 'bg-gradient-to-br from-cyan-500 to-indigo-600 text-white'
-              : 'bg-amber-100 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 border border-amber-300 dark:border-amber-800'
+              : 'bg-blue-100 dark:bg-blue-950/40 text-blue-700 dark:text-blue-400 border border-blue-300 dark:border-blue-800'
           }`}>
             {isBisRelated ? <Bot size={14} /> : <AlertCircle size={14} />}
           </div>
           <span className={`text-[11px] font-semibold uppercase tracking-wider ${
-            isBisRelated ? 'text-slate-700 dark:text-neutral-200' : 'text-amber-800 dark:text-amber-400'
+            isBisRelated ? 'text-slate-700 dark:text-neutral-200' : 'text-slate-700 dark:text-neutral-300'
           }`}>
-            {isBisRelated ? 'BIS Technical Synthesis' : 'Not Related to BIS Standards'}
+            {isBisRelated ? 'BIS Technical Synthesis' : 'Product Search Advisory'}
           </span>
         </div>
 
@@ -66,8 +75,8 @@ export default function AIResponse({
             Standard Compliance
           </span>
         ) : (
-          <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-amber-700 dark:text-amber-400 font-medium">
-            Out of Scope
+          <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 text-slate-600 dark:text-neutral-400 font-medium">
+            Search Guidance
           </span>
         )}
       </div>
@@ -78,17 +87,17 @@ export default function AIResponse({
       </p>
 
       {/* AI Walk-Along Advisory Box */}
-      {aiWalkalong && (
-        <div className={`my-3.5 p-3.5 rounded-xl border text-[12px] leading-relaxed whitespace-pre-line ${
+      {cleanWalkalong && (
+        <div className={`my-3 p-3 rounded-xl border text-[12px] leading-relaxed ${
           isBisRelated
             ? 'bg-slate-50/90 dark:bg-neutral-950/80 border-slate-200/80 dark:border-neutral-800 text-slate-700 dark:text-neutral-300'
-            : 'bg-amber-50/70 dark:bg-amber-950/30 border-amber-200/70 dark:border-amber-800/60 text-amber-900 dark:text-amber-300'
+            : 'bg-slate-50 dark:bg-neutral-950 border-slate-200 dark:border-neutral-800 text-slate-600 dark:text-neutral-400'
         }`}>
-          <div className="flex items-center gap-1.5 font-semibold mb-1 text-[11px] uppercase tracking-wider">
-            <Compass size={13} className={isBisRelated ? 'text-blue-600 dark:text-blue-400' : 'text-amber-600 dark:text-amber-400'} />
-            <span>{isBisRelated ? 'Compliance Walk-Along' : 'AI Scope Advisory'}</span>
+          <div className="flex items-center gap-1.5 font-semibold mb-1 text-[11px] uppercase tracking-wider text-slate-700 dark:text-neutral-300">
+            <Compass size={13} className="text-blue-600 dark:text-blue-400" />
+            <span>{isBisRelated ? 'Compliance Walk-Along' : 'Search Recommendation'}</span>
           </div>
-          <div className="mt-1">{aiWalkalong}</div>
+          <div className="mt-1 text-slate-600 dark:text-neutral-400 leading-normal">{cleanWalkalong}</div>
         </div>
       )}
 

@@ -841,5 +841,267 @@ export const BIS_TOPIC_DATASETS: Record<string, TopicData> = {
         }
       ]
     }
+  },
+
+  // =========================================================================
+  // TOPIC 7: PAINTS, ENAMELS & CHEMICAL COATINGS
+  // =========================================================================
+  paints_coatings: {
+    id: 'paints_coatings',
+    category: 'Chemical',
+    keywords: [
+      'paint', 'paints', 'painting', 'coating', 'coatings', 'varnish', 'enamel',
+      'distemper', 'primer', 'lead content', 'lead in paint', 'paint manufacturing',
+      'is 15489', 'is 133', 'is 2932', 'is 5410', 'is 101', 'voc', 'qco', 'wall paint'
+    ],
+    sampleQueries: [
+      'paint manufacturing',
+      'paint',
+      'paints',
+      'paints and varnishes standards',
+      'lead limit in paint bis',
+      'synthetic enamel paint specification',
+      'interior wall paint standard'
+    ],
+    data: {
+      summary:
+        "Paint manufacturing in India is governed by strict chemical safety standards under the Regulation of Lead Contents in Household and Decorative Paints Rules and BIS Quality Control Orders. IS 15489 strictly mandates a maximum lead concentration of 90 ppm to prevent toxic exposure, alongside IS 133 for interior enamels, IS 2932 for exterior synthetic enamels, and IS 101 for standard laboratory test methods.",
+      query_magnified:
+        'paint manufacturing, paints and varnishes, IS 15489 lead content limits 90 ppm, IS 133 interior enamel, IS 2932 synthetic exterior enamel, IS 101 test methods, BIS ISI mark license, chemical division',
+      standards: [
+        {
+          is_code: 'IS 15489 : 2004',
+          title: 'Paints, Enamels and Related Products — Specification for Cross-Cut Adhesion and Lead Content Limits',
+          confidence: 96,
+          confidence_tier: 'high',
+          highlight_reason:
+            'PRIMARY STATUTORY SAFETY STANDARD: Imposes mandatory restriction on lead content (maximum 90 ppm / 90 mg/kg dry film weight) for decorative, architectural, and household paints under Government of India Gazette notification.',
+          key_clauses: [
+            'Clause 4: Maximum Permissible Lead Content (90 ppm dry weight)',
+            'Clause 5: Cross-Cut Adhesion Tape Test (Classification 0 to 5)',
+            'Clause 7: Mandatory Safety Labeling and Warning Declarations'
+          ],
+          division: 'Chemical',
+          year: 2004,
+          abstract_scope:
+            'Specifies allowable toxic heavy metal thresholds, especially lead and volatile organic compounds (VOCs), for household and industrial paints, ensuring safety for residential living spaces.',
+          url: 'https://www.services.bis.gov.in/php/BIS_2.0/bisconnect/knowyourstandards/indian_standards/isdetails/15489'
+        },
+        {
+          is_code: 'IS 133 : 2013',
+          title: 'Enamel, Interior, (a) Undercoating, (b) Finishing — Specification',
+          confidence: 91,
+          confidence_tier: 'high',
+          highlight_reason:
+            'ARCHITECTURAL ENAMEL: Prescribes drying time, finish gloss level, surface opacity, scratch resistance, and flexibility on wood, metal, and masonry substrates.',
+          key_clauses: [
+            'Clause 6: Drying Time (Surface dry < 4h, Hard dry < 18h)',
+            'Clause 8: Specular Gloss at 60 degrees (> 85 units)',
+            'Clause 10: Scratch Hardness and Adhesion Conformance'
+          ],
+          division: 'Chemical',
+          year: 2013,
+          abstract_scope:
+            'Specifies requirements for interior air-drying synthetic enamel used for protective and decorative finishing on primed surfaces.',
+          url: 'https://www.services.bis.gov.in/php/BIS_2.0/bisconnect/knowyourstandards/indian_standards/isdetails/133'
+        },
+        {
+          is_code: 'IS 2932 : 2013',
+          title: 'Enamel, Synthetic, Exterior: (a) Undercoating, (b) Finishing — Specification',
+          confidence: 86,
+          confidence_tier: 'high',
+          highlight_reason:
+            'EXTERIOR WEATHERPROOFING: Mandates accelerated weathering resistance, UV stability, and resistance to water immersion without blistering or chalking.',
+          key_clauses: [
+            'Clause 7: Accelerated Weathering Exposure (1000 hours UV test)',
+            'Clause 9: Resistance to Continuous Water Immersion',
+            'Clause 12: Recoating Properties and Flexibility'
+          ],
+          division: 'Chemical',
+          year: 2013,
+          abstract_scope:
+            'Covers synthetic exterior enamel suitable for harsh outdoor climatic conditions, marine environments, and industrial plant structures.',
+          url: 'https://www.services.bis.gov.in/php/BIS_2.0/bisconnect/knowyourstandards/indian_standards/isdetails/2932'
+        },
+        {
+          is_code: 'IS 101 (Part 1 to 9)',
+          title: 'Methods of Sampling and Test for Paints, Varnishes and Related Products',
+          confidence: 80,
+          confidence_tier: 'high',
+          highlight_reason:
+            'MANDATORY TESTING CODE: The definitive laboratory test standard in India governing viscosity, flash point, drying time, volatile matter, and pigment analysis for all paint manufacturers.',
+          key_clauses: [
+            'Part 1/Sec 5: Consistency and Flow by Ford Cup Viscometer',
+            'Part 3/Sec 1: Determination of Total Volatile Matter at 105°C',
+            'Part 5/Sec 2: Wet Abrasion and Washability Test'
+          ],
+          division: 'Chemical',
+          year: 2015,
+          abstract_scope:
+            'Standardized procedures for physical and chemical evaluation of coatings, establishing criteria for NABL laboratory verification.',
+          url: 'https://www.services.bis.gov.in/php/BIS_2.0/bisconnect/knowyourstandards/indian_standards/isdetails/101'
+        },
+        {
+          is_code: 'IS 5410 : 2013',
+          title: 'Cement Paint, Colour as Required — Specification',
+          confidence: 74,
+          confidence_tier: 'moderate',
+          highlight_reason:
+            'MASONRY WATERPROOF COATING: Governs Portland cement-based powder paints for porous concrete and exterior building plaster, establishing minimum opacity and water repellency.',
+          key_clauses: [
+            'Clause 5: Portland Cement Content (Minimum 60% by mass)',
+            'Clause 7: Water Absorption of Treated Masonry Block',
+            'Clause 9: Durability and Color Fastness under Sunlight'
+          ],
+          division: 'Chemical / Civil',
+          year: 2013,
+          abstract_scope:
+            'Specifies composition and testing for dry cement powder paint formulated with white/grey Portland cement, lime, pigments, and water repellents.',
+          url: 'https://www.services.bis.gov.in/php/BIS_2.0/bisconnect/knowyourstandards/indian_standards/isdetails/5410'
+        }
+      ]
+    }
+  },
+
+  // =========================================================================
+  // TOPIC 8: CEMENT, CONCRETE & STRUCTURAL MATERIALS
+  // =========================================================================
+  cement_concrete: {
+    id: 'cement_concrete',
+    category: 'Civil',
+    keywords: [
+      'cement', 'opc', 'ppc', 'ordinary portland cement', 'concrete', 'rcc',
+      'is 269', 'is 456', 'is 1489', 'is 8112', 'is 12269', '33 grade', '43 grade', '53 grade',
+      'compressive strength', 'setting time', 'clinker', 'fly ash'
+    ],
+    sampleQueries: [
+      'cement standards',
+      'ordinary portland cement manufacturing',
+      'concrete mix design',
+      'IS 269 cement'
+    ],
+    data: {
+      summary:
+        "Cement manufacturing in India is strictly regulated under the Cement Quality Control Order, making BIS certification (Scheme-I ISI mark) compulsory before sale. IS 269 governs 33, 43, and 53 Grade Ordinary Portland Cement, establishing mandatory 28-day compressive strength, Blaine fineness (min 225 m²/kg), and sound test limits.",
+      query_magnified:
+        'cement standards, IS 269 ordinary portland cement, IS 456 plain and reinforced concrete, IS 1489 portland pozzolana cement, mandatory QCO, compressive strength, setting time',
+      standards: [
+        {
+          is_code: 'IS 269 : 2015',
+          title: 'Ordinary Portland Cement — Specification (33, 43 and 53 Grade)',
+          confidence: 98,
+          confidence_tier: 'high',
+          highlight_reason:
+            'COMPULSORY STATUTORY STANDARD: Covers physical and chemical requirements for 33, 43, and 53 grade cement. Enforces strict lime saturation factor (0.66-1.02), max magnesia 6%, and setting time limits.',
+          key_clauses: [
+            'Clause 5: Chemical Requirements (Insoluble residue, SO3, Magnesia)',
+            'Clause 6: Physical Requirements (Initial setting > 30 min, Final < 600 min)',
+            'Clause 7: 28-Day Compressive Strength Benchmarks'
+          ],
+          division: 'Civil',
+          year: 2015,
+          abstract_scope:
+            'Prescribes manufacturing parameters, chemical composition limits, and mechanical strength requirements for Ordinary Portland Cement.',
+          url: 'https://www.services.bis.gov.in/php/BIS_2.0/bisconnect/knowyourstandards/indian_standards/isdetails/269'
+        },
+        {
+          is_code: 'IS 456 : 2000',
+          title: 'Plain and Reinforced Concrete — Code of Practice',
+          confidence: 94,
+          confidence_tier: 'high',
+          highlight_reason:
+            'THE NATIONAL CONCRETE CODE: Primary standard for structural engineers across India specifying design, durability, water-cement ratios, and curing requirements.',
+          key_clauses: [
+            'Clause 5: Quality of Cement, Aggregates, Water and Admixtures',
+            'Clause 8: Durability Requirements and Minimum Cement Content',
+            'Clause 15: Sampling and Acceptance Criteria for Concrete Strength'
+          ],
+          division: 'Civil',
+          year: 2000,
+          abstract_scope:
+            'Applies to the use of plain and reinforced concrete in general building and civil engineering construction.',
+          url: 'https://www.services.bis.gov.in/php/BIS_2.0/bisconnect/knowyourstandards/indian_standards/isdetails/456'
+        },
+        {
+          is_code: 'IS 1489 (Part 1) : 2015',
+          title: 'Portland Pozzolana Cement — Specification (Fly Ash Based)',
+          confidence: 88,
+          confidence_tier: 'high',
+          highlight_reason:
+            'ECO-FRIENDLY CEMENT: Regulates fly-ash blended cement (15-35% pozzolana) with high sulfate resistance and low heat of hydration.',
+          key_clauses: [
+            'Clause 4: Pozzolanic Material Content (15% to 35% Fly Ash by mass)',
+            'Clause 6: Soundness and Le-Chatelier Expansion (Max 10 mm)',
+            'Clause 8: Compressive Strength (28-day min 33 MPa)'
+          ],
+          division: 'Civil',
+          year: 2015,
+          abstract_scope:
+            'Specification for fly-ash based Portland Pozzolana Cement for hydraulic structures, marine construction, and general RCC work.',
+          url: 'https://www.services.bis.gov.in/php/BIS_2.0/bisconnect/knowyourstandards/indian_standards/isdetails/1489'
+        }
+      ]
+    }
+  },
+
+  // =========================================================================
+  // TOPIC 9: SOLAR PHOTOVOLTAIC & INVERTERS
+  // =========================================================================
+  solar_pv: {
+    id: 'solar_pv',
+    category: 'Electrotechnical',
+    keywords: [
+      'solar', 'solar panel', 'photovoltaic', 'pv module', 'inverter', 'solar inverter',
+      'is 14286', 'is 16221', 'is 61730', 'mnre', 'crs', 'grid tied', 'rooftop solar'
+    ],
+    sampleQueries: [
+      'solar panel manufacturing standards',
+      'solar inverter bis requirements',
+      'photovoltaic module testing'
+    ],
+    data: {
+      summary:
+        "Solar photovoltaic modules and power inverters in India are subject to mandatory registration under the Solar Photovoltaics, Systems, Devices and Components Goods (Requirements for Compulsory Registration) Order by MNRE and BIS. IS 14286 governs design qualification and type approval for crystalline silicon modules, ensuring resistance to UV degradation, thermal cycling, and hail impact.",
+      query_magnified:
+        'solar panel manufacturing, photovoltaic modules, IS 14286 design qualification, IS 16221 grid tied power inverter safety, MNRE compulsory registration scheme CRS, damp heat testing',
+      standards: [
+        {
+          is_code: 'IS 14286 : 2010',
+          title: 'Crystalline Silicon Terrestrial Photovoltaic (PV) Modules — Design Qualification and Type Approval',
+          confidence: 96,
+          confidence_tier: 'high',
+          highlight_reason:
+            'COMPULSORY MNRE REGISTRATION: Mandates environmental stress testing (thermal cycling 200 cycles, damp-heat 1000 hours at 85°C/85% RH, mechanical load 2400 Pa).',
+          key_clauses: [
+            'Clause 10.11: Thermal Cycling Test (-40°C to +85°C)',
+            'Clause 10.13: Damp Heat Test (1000 hours at 85% RH)',
+            'Clause 10.16: Mechanical Load Test (Wind & Snow 2400 Pa)'
+          ],
+          division: 'Electrotechnical',
+          year: 2010,
+          abstract_scope:
+            'Lays down requirements for design qualification and type approval of terrestrial photovoltaic modules suitable for long-term outdoor operation in general open-air climates.',
+          url: 'https://www.services.bis.gov.in/php/BIS_2.0/bisconnect/knowyourstandards/indian_standards/isdetails/14286'
+        },
+        {
+          is_code: 'IS 16221 (Part 2) : 2015',
+          title: 'Safety of Power Converters for Use in Photovoltaic Power Systems — Particular Requirements for Inverters',
+          confidence: 92,
+          confidence_tier: 'high',
+          highlight_reason:
+            'MANDATORY SOLAR INVERTER CODE: Specifies electrical safety, anti-islanding protection, IP protection (IP65 exterior), and insulation coordination for grid-interactive and standalone inverters.',
+          key_clauses: [
+            'Clause 4: Protection Against Electric Shock and Arc Faults',
+            'Clause 7: Enclosure Environmental Ingress Protection (IP65)',
+            'Clause 9: Grid Disconnection & Anti-Islanding Trip Times'
+          ],
+          division: 'Electrotechnical',
+          year: 2015,
+          abstract_scope:
+            'Applies to grid-connected and standalone inverters used in photovoltaic energy systems up to 1000V DC.',
+          url: 'https://www.services.bis.gov.in/php/BIS_2.0/bisconnect/knowyourstandards/indian_standards/isdetails/16221'
+        }
+      ]
+    }
   }
 };

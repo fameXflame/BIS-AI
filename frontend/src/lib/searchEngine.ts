@@ -80,19 +80,19 @@ export function searchBISStandards(rawQuery: string): SearchResult {
     const isGreeting = /^(hi+|hello+|hey+|hola|howdy|namaste|greetings)\b/i.test(query);
     if (isGreeting) {
       return {
-        summary: "Hello! I am BIS AI — your intelligent assistant for Bureau of Indian Standards (BIS) regulations, product safety norms, and manufacturing compliance in India.",
+        summary: "Hello! I am BIS AI — your search engine for Bureau of Indian Standards (BIS) regulations, product safety norms, and manufacturing compliance.",
         query_magnified: "",
         is_bis_related: false,
-        ai_walkalong: "**How I can assist you:**\n\n• **Find Indian Standards:** Search by product name (e.g. electric kettles, toys, helmets, steel, water) or directly by IS code (e.g. IS 302, IS 10500, IS 2347).\n• **Testing & Tolerances:** Discover mandatory test protocols (dielectric, burst pressure, tensile, chemical leaching).\n• **Certification Roadmap:** Step-by-step guidance for Scheme-I (ISI Mark) and Scheme-II (CRS) licensing.\n\n💡 *Click any of the suggested topics below to explore!*",
+        ai_walkalong: "Search for any manufactured product or IS code to discover applicable Indian Standards, mandatory test protocols, and certification roadmaps.",
         standards: [],
       };
     }
 
     return {
-      summary: "This query does not appear to be related to Bureau of Indian Standards (BIS) or product certification.",
+      summary: "No direct standard match found for this query.",
       query_magnified: "",
       is_bis_related: false,
-      ai_walkalong: "**What BIS AI specializes in:**\n\n• **Indian Standards (IS Codes):** Specifications, dimensions, chemical limits, and tolerances for goods sold in India.\n• **Mandatory Quality Control Orders (QCO):** Products requiring compulsory ISI mark or CRS registration before manufacture/import.\n• **Laboratory Testing Norms:** Dielectric strength, tensile stress, leaching limits, fire resistance, and microbial tests.\n• **Certification Pathways:** Step-by-step guidance for Scheme I (ISI Mark), Scheme II (CRS), and NABL audits.\n\n💡 **Try asking:**\n• 'Electric kettle manufacturing testing requirements'\n• 'Permissible limits for lead and arsenic in drinking water'\n• 'Seismic design criteria for multi-storey concrete structures'\n• 'Safety requirements for toys or solar photovoltaic modules'",
+      ai_walkalong: "Try searching by a specific product category (such as paints, cement, electric kettles, drinking water, or solar modules) or enter an IS code directly.",
       standards: [],
     };
   }
