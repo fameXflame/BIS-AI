@@ -30,6 +30,89 @@ interface StandardDetailModalProps {
   onClose: () => void;
 }
 
+/**
+ * Strips raw LaTeX delimiters and translates LaTeX math syntax into clean Unicode symbols.
+ */
+function cleanLatexMath(raw: string): string {
+  if (!raw) return '';
+  let t = raw;
+
+  // 1. Convert LaTeX text tags: \text{...} -> ...
+  t = t.replace(/\\text\{([^}]+)\}/g, '$1');
+
+  // 2. Convert common LaTeX symbols to clean Unicode
+  t = t.replace(/\^\\circ|\^\{\\circ\}|\\degree|\\circ/g, '°');
+  t = t.replace(/\\pm/g, '±');
+  t = t.replace(/\\leq|\\le/g, '≤');
+  t = t.replace(/\\geq|\\ge/g, '≥');
+  t = t.replace(/\\neq|\\ne/g, '≠');
+  t = t.replace(/\\times/g, '×');
+  t = t.replace(/\\approx/g, '≈');
+  t = t.replace(/\\mu/g, 'µ');
+  t = t.replace(/\\Omega|\\ohm/g, 'Ω');
+  t = t.replace(/\\cdot/g, '·');
+  t = t.replace(/\\Delta/g, 'Δ');
+  t = t.replace(/\\frac\{([^}]+)\}\{([^}]+)\}/g, '$1/$2');
+  t = t.replace(/\^2|\^\{2\}/g, '²');
+  t = t.replace(/\^3|\^\{3\}/g, '³');
+
+  // 3. Strip $...$ math delimiters
+  t = t.replace(/\$([^$]+)\$/g, '$1');
+
+  // 4. Strip stray backslashes
+  t = t.replace(/\\([a-zA-Z]+)/g, '$1');
+  t = t.replace(/\\/g, '');
+
+  // 5. Clean up degree and unit spacings
+  t = t.replace(/(\d+)\s*°\s*C\b/g, '$1°C');
+  t = t.replace(/°\s*C\b/g, '°C');
+  t = t.replace(/\s+/g, ' ');
+
+  return t.trim();
+}
+
+/**
+ * Renders markdown bolding (**...**), bullet points, and cleans math syntax.
+ */
+function FormattedAnswer({ text }: { text: string }) {
+  const cleaned = cleanLatexMath(text);
+  const lines = cleaned.split('\n').map((l) => l.trim()).filter(Boolean);
+
+  return (
+    <div className="space-y-2 leading-relaxed text-[12px] text-slate-800 dark:text-neutral-200">
+      {lines.map((line, lIdx) => {
+        const isBullet = line.startsWith('•') || line.startsWith('-') || line.startsWith('*');
+        const content = isBullet ? line.replace(/^[•\-\*]\s*/, '') : line;
+
+        // Split by **bold** tags
+        const segments = content.split(/(\*\*[^*]+\*\*)/g);
+
+        const renderedSegments = segments.map((seg, sIdx) => {
+          if (seg.startsWith('**') && seg.endsWith('**')) {
+            return (
+              <strong key={sIdx} className="font-semibold text-slate-900 dark:text-white">
+                {seg.slice(2, -2)}
+              </strong>
+            );
+          }
+          return <span key={sIdx}>{seg}</span>;
+        });
+
+        if (isBullet) {
+          return (
+            <div key={lIdx} className="flex items-start gap-2 pl-1">
+              <span className="text-cyan-600 dark:text-cyan-400 font-bold mt-0.5">•</span>
+              <div className="flex-1">{renderedSegments}</div>
+            </div>
+          );
+        }
+
+        return <p key={lIdx}>{renderedSegments}</p>;
+      })}
+    </div>
+  );
+}
+
 export default function StandardDetailModal({ standard, onClose }: StandardDetailModalProps) {
   const [copied, setCopied] = useState(false);
   const [expandedClause, setExpandedClause] = useState<number | null>(0);
@@ -276,73 +359,11 @@ export default function StandardDetailModal({ standard, onClose }: StandardDetai
                   Ask precise questions on tolerances, maximum percentages, or test apparatus for <strong className="text-slate-800 dark:text-slate-200">{standard.is_code}</strong>.
                 </p>
 
-                {/* Quick Prompts */}
-                <div className="flex flex-wrap gap-1.5">
-                  {[
-                    'What is the maximum water absorption percentage?',
-                    'What is the compressive strength requirement?',
-                    'Is this standard mandatory under QCO?',
-                    'What testing equipment is required?',
-                  ].map((qPrompt, qIdx) => (
-                    <button
-                      key={qIdx}
-                      onClick={async () => {
-                        setQaInput(qPrompt);
-                        setQaLoading(true);
-                        try {
-                          const res = await askClauseQA(standard.is_code, qPrompt);
-                          setQaHistory((prev) => [
-                            ...prev,
-                            { question: qPrompt, answer: res.answer, citations: res.citations || [] },
-                          ]);
-                          setQaInput('');
-                        } catch (err) {
-                          console.error(err);
-                        } finally {
-                          setQaLoading(false);
-                        }
-                      }}
-                      className="text-[10px] px-2 py-1 rounded bg-white dark:bg-slate-800 hover:bg-cyan-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:text-cyan-800 dark:hover:text-cyan-300 font-medium transition-colors text-left"
-                    >
-                      {qPrompt}
-                    </button>
-                  ))}
-                </div>
-
-                {/* Q&A Chat Stream */}
-                {qaHistory.length > 0 && (
-                  <div className="space-y-2.5 max-h-56 overflow-y-auto custom-scrollbar pt-1">
-                    {qaHistory.map((item, idx) => (
-                      <div key={idx} className="space-y-1.5">
-                        <div className="text-[11px] font-semibold text-cyan-900 dark:text-cyan-200 bg-cyan-100/50 dark:bg-cyan-900/40 p-2 rounded-lg">
-                          Q: {item.question}
-                        </div>
-                        <div className="text-[11.5px] text-slate-800 dark:text-slate-100 bg-white dark:bg-slate-850 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 shadow-2xs leading-relaxed whitespace-pre-line">
-                          {item.answer}
-                          {item.citations?.length > 0 && (
-                            <div className="mt-2 pt-1.5 border-t border-slate-100 dark:border-slate-800 flex flex-wrap gap-1">
-                              {item.citations.map((cite, cIdx) => (
-                                <span
-                                  key={cIdx}
-                                  className="text-[9.5px] px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-medium"
-                                >
-                                  {cite}
-                                </span>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                {/* Input box */}
-                <form
-                  onSubmit={async (e) => {
-                    e.preventDefault();
-                    if (!qaInput.trim() || qaLoading) return;
-                    const question = qaInput.trim();
+                {/* Unified QA Handler */}
+                {(() => {
+                  const handleAskQuestion = async (questionText: string) => {
+                    const question = questionText.trim();
+                    if (!question || qaLoading) return;
                     setQaLoading(true);
                     try {
                       let answer = '';
@@ -373,7 +394,8 @@ User Question: "${question}"
 Provide a precise, authoritative engineering answer:
 1. Cite specific clause numbers (e.g. Clause 13, Clause 16, Clause 5, etc.).
 2. State exact numerical thresholds, allowable tolerances, or test conditions (voltages, temperatures, limits, percentages).
-3. Format with clear bullet points and bold technical terms. Keep under 3 concise paragraphs.`;
+3. Do NOT output raw LaTeX math syntax (e.g. do NOT write $550^\\circ\\text{C}$, $\\pm$, \\text{...}, or $ math tags). Use clean, standard symbols and readable units directly (e.g. 550°C, ± 0.2 N, < 0.2 A, 5 mm, 20 N).
+4. Format with clear bullet points and bold technical terms. Keep under 3 concise paragraphs.`;
 
                           const geminiText = await directGeminiGenerate(directPrompt);
                           if (geminiText) {
@@ -402,25 +424,84 @@ Provide a precise, authoritative engineering answer:
                     } finally {
                       setQaLoading(false);
                     }
-                  }}
-                  className="flex items-center gap-1.5"
-                >
-                  <input
-                    type="text"
-                    value={qaInput}
-                    onChange={(e) => setQaInput(e.target.value)}
-                    placeholder="e.g. permissible lead ppm or curing time..."
-                    className="flex-1 px-3 py-1.5 text-[11.5px] rounded-lg border border-slate-300 dark:border-slate-700 focus:border-cyan-500 focus:outline-hidden bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100"
-                  />
-                  <button
-                    type="submit"
-                    disabled={qaLoading || !qaInput.trim()}
-                    className="p-2 rounded-lg bg-cyan-600 hover:bg-cyan-700 disabled:opacity-50 text-white cursor-pointer transition-colors shrink-0"
-                    title="Ask Question"
-                  >
-                    {qaLoading ? <Loader2 size={13} className="animate-spin" /> : <Send size={13} />}
-                  </button>
-                </form>
+                  };
+
+                  return (
+                    <>
+                      {/* Quick Prompts */}
+                      <div className="flex flex-wrap gap-1.5">
+                        {[
+                          'What is the maximum water absorption percentage?',
+                          'What is the compressive strength requirement?',
+                          'Is this standard mandatory under QCO?',
+                          'What testing equipment is required?',
+                        ].map((qPrompt, qIdx) => (
+                          <button
+                            key={qIdx}
+                            onClick={() => handleAskQuestion(qPrompt)}
+                            disabled={qaLoading}
+                            className="text-[10px] px-2 py-1 rounded bg-white dark:bg-neutral-900 hover:bg-cyan-50 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-slate-700 dark:text-neutral-300 hover:text-cyan-800 dark:hover:text-cyan-300 font-medium transition-colors text-left disabled:opacity-50"
+                          >
+                            {qPrompt}
+                          </button>
+                        ))}
+                      </div>
+
+                      {/* Q&A Chat Stream */}
+                      {qaHistory.length > 0 && (
+                        <div className="space-y-2.5 max-h-64 overflow-y-auto custom-scrollbar pt-1">
+                          {qaHistory.map((item, idx) => (
+                            <div key={idx} className="space-y-1.5">
+                              <div className="text-[11px] font-semibold text-cyan-900 dark:text-cyan-200 bg-cyan-100/70 dark:bg-cyan-950/60 p-2 rounded-lg border border-cyan-200 dark:border-cyan-800/60">
+                                <span className="font-bold">Q:</span> {item.question}
+                              </div>
+                              <div className="bg-slate-50 dark:bg-neutral-900 p-3 rounded-xl border border-slate-200 dark:border-neutral-800 shadow-xs leading-relaxed">
+                                <FormattedAnswer text={item.answer} />
+                                {item.citations?.length > 0 && (
+                                  <div className="mt-2.5 pt-2 border-t border-slate-200 dark:border-neutral-800 flex flex-wrap gap-1">
+                                    {item.citations.map((cite, cIdx) => (
+                                      <span
+                                        key={cIdx}
+                                        className="text-[9.5px] px-1.5 py-0.5 rounded bg-slate-200/70 dark:bg-neutral-800 text-slate-700 dark:text-neutral-300 font-medium border border-slate-300/50 dark:border-neutral-700"
+                                      >
+                                        {cite}
+                                      </span>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Input box */}
+                      <form
+                        onSubmit={(e) => {
+                          e.preventDefault();
+                          handleAskQuestion(qaInput);
+                        }}
+                        className="flex items-center gap-1.5"
+                      >
+                        <input
+                          type="text"
+                          value={qaInput}
+                          onChange={(e) => setQaInput(e.target.value)}
+                          placeholder="e.g. permissible lead ppm or curing time..."
+                          className="flex-1 px-3 py-1.5 text-[11.5px] rounded-lg border border-slate-300 dark:border-neutral-700 focus:border-cyan-500 focus:outline-hidden bg-white dark:bg-neutral-900 text-slate-800 dark:text-neutral-100 placeholder:text-slate-400 dark:placeholder:text-neutral-500"
+                        />
+                        <button
+                          type="submit"
+                          disabled={qaLoading || !qaInput.trim()}
+                          className="p-2 rounded-lg bg-cyan-600 hover:bg-cyan-700 disabled:opacity-50 text-white cursor-pointer transition-colors shrink-0"
+                          title="Ask Question"
+                        >
+                          {qaLoading ? <Loader2 size={13} className="animate-spin" /> : <Send size={13} />}
+                        </button>
+                      </form>
+                    </>
+                  );
+                })()}
               </div>
 
               {/* Laboratory Testing Protocols */}

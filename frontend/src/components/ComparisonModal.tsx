@@ -249,7 +249,7 @@ export default function ComparisonModal({
                     <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
                       {comparisonData.comparison_points?.map((row: any, idx: number) => (
                         <tr key={idx} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/60 transition-colors">
-                          <td className="p-3 font-semibold text-slate-800 dark:text-slate-200 bg-slate-50/40 dark:bg-slate-850/40">
+                          <td className="p-3 font-semibold text-slate-800 dark:text-slate-200 bg-slate-50/40 dark:bg-slate-800/40">
                             {row.parameter}
                           </td>
                           <td className="p-3 text-slate-700 dark:text-slate-300 font-medium">
