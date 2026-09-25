@@ -37,8 +37,5 @@ data/*.sqlite
 # Build artifacts
 *.tsbuildinfo
 
-# Logs
-*.log
-npm-debug.log*
-
-# Package lock (keep package-lock.json)
+# Scraper state
+data/batches/.scraper_state.json
