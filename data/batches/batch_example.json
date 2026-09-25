@@ -1,0 +1,20 @@
+[
+  {
+    "is_code": "IS 10500: 2012",
+    "title": "Drinking Water — Specification",
+    "year": "2012",
+    "division": "Chemical Division",
+    "mandatory": true,
+    "scope": "Prescribes quality tolerances and permissible limits for drinking water intended for human consumption. It establishes mandatory maximum concentration thresholds for microbiological pathogens, physical characteristics, general chemical parameters, and toxic trace substances.",
+    "key_clauses": [
+      "Clause 4: Organoleptic & physical parameters (Turbidity < 1 NTU, pH 6.5 - 8.5)",
+      "Clause 5: General chemical limits (TDS < 500 mg/L, Total Hardness < 200 mg/L, Chlorides < 250 mg/L)",
+      "Clause 6: Toxic chemical limits (Lead max 0.01 mg/L, Arsenic max 0.01 mg/L, Chromium max 0.05 mg/L)",
+      "Clause 7: Bacteriological criteria (Zero E. coli and coliform organisms in any 100 mL sample)"
+    ],
+    "keywords": ["drinking water", "water testing", "TDS limits", "lead in water", "water quality standard", "water purification"],
+    "test_requirements": "Spectrophotometric detection for heavy metals, turbidity tube meter, membrane filtration for coliform bacteria",
+    "certification_process": "Mandatory BIS ISI Mark scheme -> NABL water testing -> Factory and source audit",
+    "url": "https://www.services.bis.gov.in/php/BIS_2.0/bisconnect/knowyourstandards/indian_standards/isdetails/3364"
+  }
+]
