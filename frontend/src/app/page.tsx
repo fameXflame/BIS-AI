@@ -379,6 +379,8 @@ export default function Home() {
                     magnifiedQuery={results.query_magnified}
                     isBisRelated={results.is_bis_related ?? true}
                     aiWalkalong={results.ai_walkalong}
+                    currentQuery={currentQuery}
+                    standards={results.standards}
                     onSuggestionClick={handleSearch}
                   />
 
