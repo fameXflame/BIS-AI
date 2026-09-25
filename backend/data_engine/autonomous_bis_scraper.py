@@ -65,8 +65,10 @@ def determine_mandatory(title: str, is_code: str, division: str) -> bool:
 def generate_clauses(title: str, section: str, is_code: str) -> list[str]:
     """Generate realistic engineering clause headings based on section and title."""
     clean_title = title.split('—')[0].split(':')[0].strip()
+    if len(clean_title) > 60:
+        clean_title = clean_title[:57] + '...'
     clauses = [
-        f"Clause 1: Scope and classification of {clean_title[:35]}",
+        f"Clause 1: Scope and classification of {clean_title}",
         f"Clause 4: Raw materials, chemical composition, and quality of manufacture",
         f"Clause 5: Physical, mechanical, and dimensional tolerances",
         f"Clause 7: Sampling criteria, routine testing, and lot acceptance limits"
@@ -129,7 +131,8 @@ def parse_archive_doc(doc: dict) -> dict | None:
         f"to safeguard national consumer safety, industrial standardization, and quality compliance."
     )
 
-    clean_num = re.sub(r'[^0-9]', '', is_code)
+    num_match = re.search(r'IS\s*([0-9]+(?:-[0-9]+)*)', is_code, re.IGNORECASE)
+    clean_num = num_match.group(1) if num_match else re.sub(r'[^0-9]', '', is_code)
 
     return {
         "is_code": is_code,
