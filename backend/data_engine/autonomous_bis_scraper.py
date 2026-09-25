@@ -148,105 +148,137 @@ def parse_archive_doc(doc: dict) -> dict | None:
         "url": f"https://www.services.bis.gov.in/php/BIS_2.0/bisconnect/knowyourstandards/indian_standards/isdetails/{clean_num}"
     }
 
-def scrape_corpus(target_count: int = 22000, batch_size: int = 1000):
+def scrape_corpus(target_count: int = 22500, batch_size: int = 2000, output_path: str = None, fresh: bool = False, no_merge: bool = False):
     root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
-    output_dir = os.path.join(root_dir, 'data', 'batches')
-    os.makedirs(output_dir, exist_ok=True)
     
-    state_file = os.path.join(output_dir, '.scraper_state.json')
-    output_file = os.path.join(output_dir, 'batch_scraped_master.json')
+    if output_path:
+        output_file = os.path.abspath(output_path)
+        output_dir = os.path.dirname(output_file)
+    else:
+        output_dir = os.path.join(root_dir, 'data', 'batches')
+        output_file = os.path.join(output_dir, 'batch_scraped_master.json')
 
-    # Load state if resuming
+    os.makedirs(output_dir, exist_ok=True)
+    state_file = os.path.join(output_dir, '.scraper_state.json')
+
     scraped_keys = set()
     all_standards = []
     start_row = 0
 
-    if os.path.exists(output_file):
-        try:
-            with open(output_file, 'r', encoding='utf-8') as f:
-                all_standards = json.load(f)
-            scraped_keys = {re.sub(r'[^a-zA-Z0-9]', '', s['is_code']).lower() for s in all_standards}
-            print(f"[Scraper] Resuming from existing batch: {len(all_standards):,} standards already saved.")
-        except Exception as e:
-            print(f"[Scraper] Note: Starting fresh output: {e}")
+    if fresh:
+        print("[Scraper] Fresh run initiated. Clearing prior state and starting from record 0.")
+        if os.path.exists(output_file):
+            try:
+                os.remove(output_file)
+            except Exception:
+                pass
+        if os.path.exists(state_file):
+            try:
+                os.remove(state_file)
+            except Exception:
+                pass
+    else:
+        # Load state if resuming
+        if os.path.exists(output_file):
+            try:
+                with open(output_file, 'r', encoding='utf-8') as f:
+                    all_standards = json.load(f)
+                scraped_keys = {re.sub(r'[^a-zA-Z0-9]', '', s['is_code']).lower() for s in all_standards}
+                print(f"[Scraper] Resuming from existing batch: {len(all_standards):,} standards already saved.")
+            except Exception as e:
+                print(f"[Scraper] Note: Starting fresh output: {e}")
 
-    if os.path.exists(state_file):
-        try:
-            with open(state_file, 'r', encoding='utf-8') as f:
-                state = json.load(f)
-                start_row = state.get('next_row', 0)
-        except Exception:
-            start_row = 0
+        if os.path.exists(state_file):
+            try:
+                with open(state_file, 'r', encoding='utf-8') as f:
+                    state = json.load(f)
+                    start_row = state.get('next_row', 0)
+            except Exception:
+                start_row = 0
+
+    PARTITIONS = [
+        '10*', '11*', '12*', '13*', '14*', '15*', '16*', '17*', '18*', '19*',
+        '1.*', '1-*',
+        '2*', '3*', '4*', '5*', '6*', '7*', '8*', '9*',
+        'sp*', 'iec*', 'iso*', 'qc*'
+    ]
 
     print("=" * 70)
     print("  AUTONOMOUS BUREAU OF INDIAN STANDARDS (BIS) HARVESTER")
-    print(f"  Target: {target_count:,} Standards | Batch Size: {batch_size}")
+    print(f"  Target: {target_count:,} Standards across {len(PARTITIONS)} Partitions")
+    print(f"  Target File: {output_file}")
     print("=" * 70)
 
-    rows_per_page = min(batch_size, 1000)
-    current_row = start_row
-    total_found = target_count
+    rows_per_page = 2000
 
-    while len(all_standards) < target_count:
-        api_url = (
-            f"https://archive.org/advancedsearch.php?"
-            f"q=identifier:(gov.in.is.*)&fl[]=identifier,title,date,description,subject,year"
-            f"&sort[]=identifier+asc&rows={rows_per_page}&page={current_row // rows_per_page + 1}&output=json"
-        )
-
-        print(f"\n[Scraper] Fetching records {current_row + 1} to {current_row + rows_per_page}...")
-        
-        req = urllib.request.Request(
-            api_url,
-            headers={
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-                'Accept': 'application/json'
-            }
-        )
-
-        try:
-            with urllib.request.urlopen(req, timeout=30) as resp:
-                data = json.loads(resp.read().decode('utf-8'))
-        except Exception as err:
-            print(f"[Scraper] Network hiccup: {err}. Retrying in 5 seconds...")
-            time.sleep(5)
-            continue
-
-        response_meta = data.get('response', {})
-        total_found = response_meta.get('numFound', total_found)
-        docs = response_meta.get('docs', [])
-
-        if not docs:
-            print("[Scraper] No more records returned. Harvesting complete.")
+    for idx, prefix in enumerate(PARTITIONS, 1):
+        if len(all_standards) >= target_count:
             break
 
-        new_in_batch = 0
-        for doc in docs:
-            parsed = parse_archive_doc(doc)
-            if not parsed:
+        current_page = 1
+        while True:
+            api_url = (
+                f"https://archive.org/advancedsearch.php?"
+                f"q=identifier:(gov.in.is.{prefix})&fl[]=identifier,title,date,description,subject,year"
+                f"&sort[]=identifier+asc&rows={rows_per_page}&page={current_page}&output=json"
+            )
+
+            print(f"\n[Scraper] Partition [{idx}/{len(PARTITIONS)}] 'gov.in.is.{prefix}' (Page {current_page})...")
+            
+            req = urllib.request.Request(
+                api_url,
+                headers={
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                    'Accept': 'application/json'
+                }
+            )
+
+            try:
+                with urllib.request.urlopen(req, timeout=45) as resp:
+                    data = json.loads(resp.read().decode('utf-8'))
+            except Exception as err:
+                print(f"[Scraper] Network hiccup: {err}. Retrying in 4 seconds...")
+                time.sleep(4)
                 continue
 
-            norm_key = re.sub(r'[^a-zA-Z0-9]', '', parsed['is_code']).lower()
-            if norm_key not in scraped_keys:
-                scraped_keys.add(norm_key)
-                all_standards.append(parsed)
-                new_in_batch += 1
+            response_meta = data.get('response', {})
+            part_total = response_meta.get('numFound', 0)
+            docs = response_meta.get('docs', [])
 
-                if len(all_standards) >= target_count:
-                    break
+            if not docs:
+                break
 
-        current_row += len(docs)
-        print(f"  -> Added {new_in_batch} new unique standards. (Total so far: {len(all_standards):,} / {min(target_count, total_found):,})")
+            new_in_batch = 0
+            for doc in docs:
+                parsed = parse_archive_doc(doc)
+                if not parsed:
+                    continue
 
-        # Save checkpoint incrementally
-        with open(output_file, 'w', encoding='utf-8') as f:
-            json.dump(all_standards, f, indent=2, ensure_ascii=False)
+                norm_key = re.sub(r'[^a-zA-Z0-9]', '', parsed['is_code']).lower()
+                if norm_key not in scraped_keys:
+                    scraped_keys.add(norm_key)
+                    all_standards.append(parsed)
+                    new_in_batch += 1
 
-        with open(state_file, 'w', encoding='utf-8') as f:
-            json.dump({'next_row': current_row, 'total': len(all_standards)}, f)
+                    if len(all_standards) >= target_count:
+                        break
 
-        # Gentle polite sleep to respect government archive bandwidth
-        time.sleep(1.0)
+            print(f"  -> Added {new_in_batch} new unique standards. (Total so far: {len(all_standards):,} / 22,025)")
+
+            # Save checkpoint incrementally
+            with open(output_file, 'w', encoding='utf-8') as f:
+                json.dump(all_standards, f, indent=2, ensure_ascii=False)
+
+            with open(state_file, 'w', encoding='utf-8') as f:
+                json.dump({'partition': prefix, 'total': len(all_standards)}, f)
+
+            if len(docs) < rows_per_page or (current_page * rows_per_page) >= part_total:
+                break
+            current_page += 1
+
+            time.sleep(0.5)
+
+        time.sleep(0.5)
 
     print("\n" + "=" * 70)
     print(f"  HARVEST COMPLETE!")
@@ -254,17 +286,26 @@ def scrape_corpus(target_count: int = 22000, batch_size: int = 1000):
     print(f"  Saved File: {output_file}")
     print("=" * 70)
 
-    # Automatically trigger merge pipeline to update backend database
-    merge_script = os.path.join(os.path.dirname(__file__), 'merge_batches.py')
-    if os.path.exists(merge_script):
-        print("\n[Scraper] Executing master merge into extended_bis_catalog.json...")
-        import subprocess
-        subprocess.run([sys.executable, merge_script])
+    if not no_merge:
+        merge_script = os.path.join(os.path.dirname(__file__), 'merge_batches.py')
+        if os.path.exists(merge_script):
+            print("\n[Scraper] Executing master merge into extended_bis_catalog.json...")
+            import subprocess
+            subprocess.run([sys.executable, merge_script])
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Autonomous BIS Standards Harvester")
-    parser.add_argument('--target', type=int, default=22000, help="Target number of standards to harvest")
-    parser.add_argument('--batch-size', type=int, default=1000, help="Batch query size (max 1000)")
+    parser.add_argument('--target', type=int, default=22500, help="Target number of standards to harvest")
+    parser.add_argument('--batch-size', type=int, default=2000, help="Batch query size (max 2000)")
+    parser.add_argument('--output', type=str, default=None, help="Custom output JSON path")
+    parser.add_argument('--fresh', action='store_true', help="Start completely fresh from record 0")
+    parser.add_argument('--no-merge', action='store_true', help="Do not run auto-merge after scraping")
     args = parser.parse_args()
 
-    scrape_corpus(target_count=args.target, batch_size=args.batch_size)
+    scrape_corpus(
+        target_count=args.target,
+        batch_size=args.batch_size,
+        output_path=args.output,
+        fresh=args.fresh,
+        no_merge=args.no_merge
+    )

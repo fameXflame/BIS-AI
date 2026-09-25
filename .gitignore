@@ -38,4 +38,4 @@ data/*.sqlite
 *.tsbuildinfo
 
 # Scraper state
-data/batches/.scraper_state.json
+**/.scraper_state.json

@@ -94,9 +94,12 @@ def main():
         except Exception as e:
             print(f"[Master Pipeline] Warning: Could not read baseline catalog: {e}")
 
-    # 2. Ingest all batch files from data/batches/*.json
+    # 2. Ingest all batch files from data/batches/*.json and master data files
     batch_files = glob.glob(os.path.join(batches_dir, '*.json'))
-    print(f"[Master Pipeline] Discovered {len(batch_files)} team batch file(s) in {batches_dir}")
+    national_catalog = os.path.join(root_dir, 'data', 'all_bis_standards_national_catalog.json')
+    if os.path.exists(national_catalog) and national_catalog not in batch_files:
+        batch_files.append(national_catalog)
+    print(f"[Master Pipeline] Discovered {len(batch_files)} catalog/batch file(s) for ingestion.")
 
     for bf in sorted(batch_files):
         file_name = os.path.basename(bf)
