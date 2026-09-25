@@ -32,6 +32,7 @@ Thumbs.db
 # Data
 data/*.db
 data/*.sqlite
+data/master_standards_catalog.json
 *.chromadb/
 
 # Build artifacts
