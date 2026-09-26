@@ -1,6 +1,6 @@
 /**
  * Built-in Gemini AI Engine for BIS AI
- * Direct browser integration powered by Gemini 3.5 Flash-Lite.
+ * Direct browser integration powered by Gemini 2.0 / 1.5 Flash.
  * Provides instant, clause-grounded, authoritative engineering answers.
  */
 
@@ -61,7 +61,7 @@ export async function directGeminiGenerate(prompt: string, maxTokens = 800): Pro
   const apiKey = getStoredApiKey();
   if (!apiKey) return null;
 
-  const models = ['gemini-flash-lite-latest', 'gemini-3.5-flash-lite', 'gemini-flash-latest'];
+  const models = ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-flash-lite-latest', 'gemini-flash-latest'];
 
   for (const model of models) {
     try {

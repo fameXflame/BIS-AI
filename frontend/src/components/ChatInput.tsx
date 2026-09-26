@@ -26,6 +26,7 @@ export default function ChatInput({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
+  const recognitionRef = useRef<any>(null);
 
   const handleSubmit = useCallback(() => {
     const trimmed = query.trim();
@@ -61,27 +62,79 @@ export default function ChatInput({
 
   const toggleRecording = async () => {
     if (isRecording) {
-      mediaRecorderRef.current?.stop();
-      setIsRecording(false);
-    } else {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        const recorder = new MediaRecorder(stream);
-        chunksRef.current = [];
-        recorder.ondataavailable = (e) => {
-          if (e.data.size > 0) chunksRef.current.push(e.data);
-        };
-        recorder.onstop = () => {
-          const blob = new Blob(chunksRef.current, { type: 'audio/webm' });
-          onAudioSubmit(blob);
-          stream.getTracks().forEach((t) => t.stop());
-        };
-        recorder.start();
-        mediaRecorderRef.current = recorder;
-        setIsRecording(true);
-      } catch {
-        console.error('Microphone access denied');
+      if (recognitionRef.current) {
+        try {
+          recognitionRef.current.stop();
+        } catch {}
       }
+      if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+        try {
+          mediaRecorderRef.current.stop();
+        } catch {}
+      }
+      setIsRecording(false);
+      return;
+    }
+
+    // 1. Try native Web Speech API (Chrome, Edge, Safari, Android) for real-time speech-to-text
+    const SpeechRecognition =
+      typeof window !== 'undefined' &&
+      ((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition);
+
+    if (SpeechRecognition) {
+      try {
+        const recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = true;
+        recognition.lang = 'en-IN';
+
+        recognition.onstart = () => {
+          setIsRecording(true);
+        };
+
+        recognition.onresult = (event: any) => {
+          const transcript = Array.from(event.results)
+            .map((result: any) => result[0].transcript)
+            .join('');
+          setQuery(transcript);
+        };
+
+        recognition.onerror = (event: any) => {
+          console.warn('Browser speech recognition error:', event.error);
+          setIsRecording(false);
+        };
+
+        recognition.onend = () => {
+          setIsRecording(false);
+        };
+
+        recognitionRef.current = recognition;
+        recognition.start();
+        return;
+      } catch (err) {
+        console.warn('Native speech recognition failed, falling back to MediaRecorder:', err);
+      }
+    }
+
+    // 2. Fallback to MediaRecorder & backend transcribeAudio
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const recorder = new MediaRecorder(stream);
+      chunksRef.current = [];
+      recorder.ondataavailable = (e) => {
+        if (e.data.size > 0) chunksRef.current.push(e.data);
+      };
+      recorder.onstop = () => {
+        const blob = new Blob(chunksRef.current, { type: 'audio/webm' });
+        onAudioSubmit(blob);
+        stream.getTracks().forEach((t) => t.stop());
+      };
+      recorder.start();
+      mediaRecorderRef.current = recorder;
+      setIsRecording(true);
+    } catch {
+      console.error('Microphone access denied or not supported');
+      alert('Microphone access was denied or is not supported in this browser.');
     }
   };
 

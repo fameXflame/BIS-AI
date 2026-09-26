@@ -77,10 +77,10 @@ export default function Header({
       <div className="flex items-center gap-2 sm:gap-2.5">
         <div className="text-right hidden sm:block">
           <span className="block text-[9px] sm:text-[9.5px] font-bold tracking-[0.2em] text-slate-500 dark:text-neutral-400 uppercase">
-            BUILT FOR A
+            TEAM ZENICX • SIH26108
           </span>
           <span className="block text-[9.5px] sm:text-[10px] font-extrabold tracking-[0.22em] text-slate-700 dark:text-neutral-200 uppercase">
-            STRONGER INDIA
+            STANDARDS INTELLIGENCE
           </span>
         </div>
         {/* Tricolor badge line */}

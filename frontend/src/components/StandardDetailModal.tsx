@@ -560,9 +560,9 @@ Provide a precise, authoritative engineering answer:
                   >
                     <span className="flex items-center gap-2">
                       <ExternalLink size={13} className="text-blue-600 dark:text-blue-400" />
-                      Find Official Gazette & PDF on bis.gov.in
+                      Search Gazette & Amendments (bis.gov.in)
                     </span>
-                    <span className="text-[10px] text-blue-500 dark:text-blue-400 font-normal">Google Site Search</span>
+                    <span className="text-[10px] text-blue-500 dark:text-blue-400 font-normal">Google Gazette Search</span>
                   </a>
 
                   <a
