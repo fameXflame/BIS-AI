@@ -94,7 +94,7 @@ flowchart LR
             direction TB
             LLM["Gemini 3.5 Flash-Lite<br/>(Local Llama-3 Option)"]
             PDF["ReportLab<br/>PDF Dossier Generator"]
-            Audio["Groq Whisper / Bhashini<br/>Speech Transcription"]
+            Audio["Groq Whisper<br/>Audio Transcription"]
         end
     end
 
