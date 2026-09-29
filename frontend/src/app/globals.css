@@ -43,20 +43,7 @@ body {
   background: rgba(0, 0, 0, 0.18);
 }
 
-/* Clean perimeter vignette for light theme */
-.vignette-center-focus {
-  background: radial-gradient(ellipse at 50% 50%, rgba(255, 255, 255, 0) 42%, rgba(203, 213, 225, 0.35) 72%, rgba(148, 163, 184, 0.52) 90%, rgba(100, 116, 139, 0.65) 100%);
-  box-shadow: inset 0 0 100px rgba(71, 85, 105, 0.18);
-  pointer-events: none;
-}
 
-
-/* Dark mode: Pitch black background — keep center and periphery crisp */
-.dark .vignette-center-focus {
-  background: transparent;
-  box-shadow: none;
-  pointer-events: none;
-}
 
 /* Liquid glass utilities */
 @layer components {

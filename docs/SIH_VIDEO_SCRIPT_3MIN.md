@@ -4,7 +4,7 @@
 **Team:** ZenicX (Team ID: SIH-10)  
 **Problem Statement:** SIH26108 (Theme: Smart Automation | Category: SOFTWARE)  
 **Target Video Duration:** Exactly 3:00 Minutes (180 Seconds)  
-**Live Application URL:** [https://bis-ai.netlify.app/](https://bis-ai.netlify.app/)  
+**Live Application URL:** [https://bis-ai-five.vercel.app/](https://bis-ai-five.vercel.app/)  
 **Voiceover Word Count:** ~395 words (paced at a natural ~130–135 words/minute with UI pauses)
 
 ---
@@ -36,7 +36,7 @@
    * `Title: AI-Powered Recommendation Engine for Identifying Applicable Indian Standards`
    * `Team: ZenicX (SIH-10) | Theme: Smart Automation`
 2. **(0:08 – 0:18)**: Screen recording of the official BIS "Know Your Standard" portal, showing an exact keyword failure or search frustration.
-3. **(0:18 – 0:25)**: Transition to **BIS AI** landing page (`https://bis-ai.netlify.app/`) with its interactive particle physics animation.
+3. **(0:18 – 0:25)**: Transition to **BIS AI** landing page (`https://bis-ai-five.vercel.app/`) with its interactive particle physics animation.
 
 #### 🎙️ Voiceover (Audio for AI Voice Generator):
 > *"Every year, Indian MSMEs and procurement officers spend weeks navigating over twenty-five thousand Bureau of Indian Standards. Existing portals rely on rigid keywords, failing on real-world engineering specifications. Welcome to BIS AI by Team ZenicX for Problem Statement SIH26108—an intelligent, context-aware engine that identifies applicable Indian Standards in under half a second."*
@@ -159,18 +159,18 @@
 ### 🎬 Scene 7: Impact & Conclusion (2:45 – 3:00 | 15s)
 
 #### 🖥️ What to Show on Screen:
-1. **(2:45 – 2:54)**: Return to live app at `https://bis-ai.netlify.app/` with closing overlay:
-   * `Live Demo: bis-ai.netlify.app`
+1. **(2:45 – 2:54)**: Return to live app at `https://bis-ai-five.vercel.app/` with closing overlay:
+   * `Live Demo: bis-ai-five.vercel.app`
    * `Accelerating Indian MSMEs · Make in India · Atmanirbhar Bharat`
 2. **(2:54 – 3:00)**: Final closing slide:
    * `Team ZenicX (SIH-10) · Thank You!`
    * Problem Statement SIH26108 · Smart India Hackathon 2026.
 
 #### 🎙️ Voiceover (Audio for AI Voice Generator):
-> *"BIS AI transforms regulatory compliance from a multi-week barrier into an instant enabler for sixty-three million Indian enterprises. Try it live at bis-ai.netlify.app. Thank you from Team ZenicX."*
+> *"BIS AI transforms regulatory compliance from a multi-week barrier into an instant enabler for sixty-three million Indian enterprises. Try it live at bis-ai-five.vercel.app. Thank you from Team ZenicX."*
 
 #### 💡 Text Overlays / Captions:
-* `Live Web App: https://bis-ai.netlify.app/`
+* `Live Web App: https://bis-ai-five.vercel.app/`
 * `Empowering 63M+ Indian MSMEs`
 * `Team ZenicX (SIH-10) · Smart India Hackathon 2026`
 
@@ -193,7 +193,7 @@ Under the hood, BIS AI utilizes a six-stage hybrid RAG pipeline. It fuses lexica
 
 Evaluated against the official SIH benchmark script, BIS AI achieves a one-hundred percent Hit Rate at three, an MRR at five of zero-point-nine-five, and an average latency of zero-point-four-two seconds—exceeding every hackathon target. Running at scale costs under two paise per query, making nationwide adoption financially effortless.
 
-BIS AI transforms regulatory compliance from a multi-week barrier into an instant enabler for sixty-three million Indian enterprises. Try it live at bis-ai.netlify.app. Thank you from Team ZenicX.
+BIS AI transforms regulatory compliance from a multi-week barrier into an instant enabler for sixty-three million Indian enterprises. Try it live at bis-ai-five.vercel.app. Thank you from Team ZenicX.
 ```
 
 ---
@@ -202,7 +202,7 @@ BIS AI transforms regulatory compliance from a multi-week barrier into an instan
 
 ### Step 1: Record Your Screen (OBS Studio or Windows Game Bar `Win + G`)
 1. **Screen Resolution:** 1920 × 1080 (Full HD, 60fps or 30fps).
-2. **Browser:** Chrome or Edge in full-screen (`F11`) opened to `https://bis-ai.netlify.app/`.
+2. **Browser:** Chrome or Edge in full-screen (`F11`) opened to `https://bis-ai-five.vercel.app/`.
 3. **Actions to record:**
    * Recording 1: Search query `"I want to manufacture an electric kettle in India"` -> Click Send -> Watch results appear.
    * Recording 2: Scroll cards -> Click a card -> Ask Clause Q&A -> Open Comparison modal.

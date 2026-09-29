@@ -198,10 +198,15 @@ export default function ChatInput({
             />
             <button
               onClick={() => fileInputRef.current?.click()}
-              className="p-1.5 sm:p-2 rounded-full text-slate-400 dark:text-neutral-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-neutral-900 transition-all duration-200 cursor-pointer"
-              title="Attach document / specification sheet"
+              className="p-1.5 sm:p-2 rounded-full text-slate-400 dark:text-neutral-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-neutral-900 transition-all duration-200 cursor-pointer flex items-center gap-1"
+              title="Upload Tender RFP / Technical Specs (PDF, DOCX, TXT)"
             >
               <Paperclip size={15} className="sm:w-[17px] sm:h-[17px]" />
+              {!compact && (
+                <span className="hidden md:inline-block text-[9.5px] font-medium text-slate-500 dark:text-neutral-400 hover:text-slate-700 dark:hover:text-neutral-200">
+                  RFP
+                </span>
+              )}
             </button>
             <button
               onClick={toggleRecording}
@@ -210,7 +215,7 @@ export default function ChatInput({
                   ? 'text-red-500 bg-red-50 dark:bg-red-950/40 recording-pulse'
                   : 'text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:bg-blue-50/60 dark:hover:bg-neutral-900'
               }`}
-              title={isRecording ? 'Stop recording' : 'Voice search'}
+              title={isRecording ? 'Stop recording' : 'Voice Search in 22 Indian Languages (Digital India Bhashini)'}
             >
               {isRecording ? (
                 <MicOff size={15} className="sm:w-[17px] sm:h-[17px]" />
@@ -227,7 +232,11 @@ export default function ChatInput({
             onChange={(e) => setQuery(e.target.value)}
             onInput={handleInput}
             onKeyDown={handleKeyDown}
-            placeholder={compact ? "Ask BIS AI..." : "Ask BIS AI — e.g. 'electric kettle safety'..."}
+            placeholder={
+              compact
+                ? "Ask BIS AI..."
+                : "Ask BIS AI — e.g. 'IS 694 power cable flame test norms' or 'TMT bar QCO'..."
+            }
             rows={1}
             disabled={isLoading}
             style={{ outline: 'none', boxShadow: 'none', border: 'none' }}

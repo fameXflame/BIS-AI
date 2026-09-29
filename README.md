@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <a href="https://bis-ai.netlify.app/">
+  <a href="https://bis-ai-five.vercel.app/">
     <img src="https://img.shields.io/badge/🚀_Live_Demo-bis--ai.netlify.app-blue?style=for-the-badge" alt="Live Demo" />
   </a>
 </p>
@@ -526,7 +526,7 @@ The frontend is deployed as a static site on Netlify. The `netlify.toml` handles
 ```
 
 1. Connect the repo to [Netlify](https://app.netlify.com/)
-2. Deploy — done! The live site is at **[bis-ai.netlify.app](https://bis-ai.netlify.app/)**
+2. Deploy — done! The live site is at **[bis-ai-five.vercel.app](https://bis-ai-five.vercel.app/)**
 
 ### Backend (Any Python Host)
 
@@ -631,7 +631,7 @@ This project was developed for the **Smart India Hackathon** — India's largest
 ---
 
 <p align="center">
-  <a href="https://bis-ai.netlify.app/">
+  <a href="https://bis-ai-five.vercel.app/">
     <img src="https://img.shields.io/badge/🚀_Try_it_Live-bis--ai.netlify.app-blue?style=for-the-badge" alt="Live Demo" />
   </a>
 </p>
