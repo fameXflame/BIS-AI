@@ -68,32 +68,58 @@ Over **63 million Indian MSMEs** struggle to identify applicable Bureau of India
 ## 🏗️ System Architecture & Engineering Pipeline
 
 ```mermaid
-flowchart TD
-    subgraph Client["1. Client Tier (Next.js 14)"]
-        UI["React 18 + Tailwind CSS + Framer Motion"]
-        Voice["Voice Input (Digital India Bhashini / Web Speech API)"]
-        Doc["Document Parser (PDF Technical Specs via PyMuPDF)"]
+flowchart LR
+    subgraph Frontend["Frontend (Next.js 14)"]
+        direction TB
+        UI["React 18 UI<br/>Tailwind + Framer Motion"]
+        Input["Multimodal Input<br/>Text / Voice / File"]
+        Display["Results Display<br/>Cards + Modals + PDF"]
     end
 
-    subgraph Gateway["2. Gateway Tier (FastAPI Async)"]
-        API["REST API Router (10 Endpoints) + Pydantic v2"]
-        QC["Query Tokenizer & Domain Acronym Expander"]
+    subgraph Backend["Backend (FastAPI)"]
+        direction TB
+        API["REST API Router<br/>Search / Compare / Export"]
+
+        subgraph Pipeline["Hybrid Search Pipeline"]
+            direction TB
+            QC["Query Classification<br/>& Domain Expansion"]
+            BM25["BM25 Sparse<br/>Lexical Retrieval"]
+            Dense["Dense Semantic<br/>BGE-small-en-v1.5 (ONNX)"]
+            RRF["Reciprocal Rank<br/>Fusion (RRF k=60)"]
+            AF["Clause Grounding &<br/>Applicability Filter"]
+            CR["Cross-Encoder<br/>Neural Reranker"]
+        end
+
+        subgraph Services["AI & Compliance Services"]
+            direction TB
+            LLM["Gemini 3.5 Flash-Lite<br/>(Local Llama-3 Option)"]
+            PDF["ReportLab<br/>PDF Dossier Generator"]
+            Audio["Groq Whisper / Bhashini<br/>Speech Transcription"]
+        end
     end
 
-    subgraph Retrieval["3. Dual-Stream Hybrid Retrieval Engine"]
-        BM25["Sparse Stream: BM25 Okapi<br/>(Inverted Index / Exact Code Match)"]
-        Dense["Dense Stream: ONNX bge-small-en-v1.5<br/>(384-dim Float32 Cosine Similarity)"]
-        RRF["Reciprocal Rank Fusion (RRF k=60)<br/>RRF(d) = &Sigma; 1 / (60 + r_m(d))"]
-        Rerank["Cross-Encoder Neural Reranker<br/>(ms-marco-MiniLM-L-6-v2)"]
+    subgraph Data["Data Layer (<250MB RAM)"]
+        direction TB
+        DB["22,446 Standards<br/>Merged Database"]
+        EMB["Precomputed Float32 Embeddings<br/>384-dim In-Memory (34.5 MB)"]
+        Gazette["BIS Gazette & QCO Index<br/>Autonomous Scraper Deltas"]
     end
 
-    subgraph Output["4. Grounded Output & Compliance Export"]
-        Guard["Deterministic Clause-Level Verification Guard<br/>(Zero-Uncited Assertion Policy)"]
-        LLM["Grounded Gemini 3.5 Flash-Lite Synthesis<br/>(Air-Gapped Local Quantized Llama-3 Option)"]
-        PDF["ReportLab Automated PDF Compliance Dossier"]
-    end
-
-    Client --> Gateway --> Retrieval --> Output
+    Input --> API
+    API --> QC
+    QC --> BM25
+    QC --> Dense
+    BM25 --> RRF
+    Dense --> RRF
+    RRF --> AF
+    AF --> CR
+    CR --> LLM
+    LLM --> Display
+    API --> PDF
+    API --> Audio
+    DB --> BM25
+    EMB --> Dense
+    Gazette --> DB
 ```
 
 ### 5-Phase Production Methodology
